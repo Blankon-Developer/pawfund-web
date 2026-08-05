@@ -15,7 +15,16 @@ const mockingEnabledPromise =
       })
     : Promise.resolve()
 
-export function MSWProvider({
+function MSWProviderWrapper({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  use(mockingEnabledPromise)
+  return children
+}
+
+function MSWProvider({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -30,11 +39,4 @@ export function MSWProvider({
   )
 }
 
-function MSWProviderWrapper({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
-  use(mockingEnabledPromise)
-  return children
-}
+export { MSWProvider }

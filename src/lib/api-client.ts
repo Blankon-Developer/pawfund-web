@@ -84,7 +84,6 @@ async function fetchApi<T>(
 
     if (!response.ok) {
       const res = (await response.json()) as ApiResponseType
-      console.log({ response, res })
       if (response.status === 422) {
         throw new ApiValidationError(
           res.message,
@@ -119,26 +118,26 @@ export const apiClient = {
   get<T>(url: string, options?: RequestOptions): Promise<ApiResponseType<T>> {
     return fetchApi<T>(url, { ...options, method: "GET" })
   },
-  post<T>(
+  post<TRes, TBody = any>(
     url: string,
-    body?: any,
+    body?: TBody,
     options?: RequestOptions
-  ): Promise<ApiResponseType<T>> {
-    return fetchApi<T>(url, { ...options, method: "POST", body })
+  ): Promise<ApiResponseType<TRes>> {
+    return fetchApi<TRes>(url, { ...options, method: "POST", body })
   },
-  put<T>(
+  put<TRes, TBody = any>(
     url: string,
-    body?: any,
+    body?: TBody,
     options?: RequestOptions
-  ): Promise<ApiResponseType<T>> {
-    return fetchApi<T>(url, { ...options, method: "PUT", body })
+  ): Promise<ApiResponseType<TRes>> {
+    return fetchApi<TRes>(url, { ...options, method: "PUT", body })
   },
-  patch<T>(
+  patch<TRes, TBody = any>(
     url: string,
-    body?: any,
+    body?: TBody,
     options?: RequestOptions
-  ): Promise<ApiResponseType<T>> {
-    return fetchApi<T>(url, { ...options, method: "PATCH", body })
+  ): Promise<ApiResponseType<TRes>> {
+    return fetchApi<TRes>(url, { ...options, method: "PATCH", body })
   },
   delete<T>(
     url: string,

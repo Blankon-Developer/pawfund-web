@@ -6,6 +6,7 @@ import { useTheme } from "next-themes"
 import { Button, buttonVariants } from "./shadcn-ui/button"
 import { VariantProps } from "class-variance-authority"
 import { useEffect, useState } from "react"
+import { useAppKitTheme } from "@reown/appkit/react"
 
 export function ToggleTheme({
   variant = "outline",
@@ -16,14 +17,22 @@ export function ToggleTheme({
   size?: "icon" | "icon-xs" | "icon-sm" | "icon-lg"
 }) {
   const { theme, setTheme } = useTheme()
+  const { setThemeMode } = useAppKitTheme()
 
   const [mounted, setMounted] = useState(false)
   useEffect(() => {
     function applyMounted() {
       setMounted(true)
+      setThemeMode(theme === "dark" ? "dark" : "light")
     }
     applyMounted()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const handleThemeChange = (newTheme: "dark" | "light") => {
+    setTheme(newTheme)
+    setThemeMode(newTheme)
+  }
 
   if (!mounted)
     return (
@@ -36,7 +45,7 @@ export function ToggleTheme({
     <Button
       variant={variant}
       size={size}
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={() => handleThemeChange(theme === "light" ? "dark" : "light")}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       className={className}
       suppressHydrationWarning

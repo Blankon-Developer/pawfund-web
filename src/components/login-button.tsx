@@ -1,0 +1,64 @@
+"use client"
+
+import { useErc20TokenBalance } from "@/hooks/erc20-token-balance"
+import { cn } from "@/utils"
+import { maskAddress } from "@/utils/mask-address"
+import { useAppKit } from "@reown/appkit/react"
+import { useAccount } from "wagmi"
+import { Button } from "./shadcn-ui/button"
+import { Skeleton } from "./shadcn-ui/skeleton"
+import { USDCIcon } from "@/assets/usdc.icon"
+import { MenuPopover } from "./menu-popover"
+import { useEffect } from "react"
+
+export function LoginButton({ className }: { className?: string }) {
+  const { open } = useAppKit()
+  const { address, isConnected, isDisconnected } = useAccount()
+
+  const { data: balanceData, isLoading: isBalanceLoading } =
+    useErc20TokenBalance({
+      balanceOf: address as `0x${string}`,
+      tokenAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+    })
+
+    useEffect(()=> {
+
+    }, [isDisconnected])
+
+  if (isConnected) {
+    return (
+      <MenuPopover
+        trigger={
+          <Button
+            variant={"secondary"}
+            className={cn("bg-gray-200 dark:bg-secondary", className)}
+          >
+            {isBalanceLoading ? (
+              <Skeleton className="h-3 w-16 bg-gray-100 dark:bg-neutral-900/90" />
+            ) : (
+              <div className="-ml-1.5 flex items-center gap-0.5">
+                <USDCIcon className="size-5.5 text-gray-700 dark:text-neutral-300" />
+                <span>{`${balanceData?.formatedBalance} ${balanceData?.symbol}`}</span>
+              </div>
+            )}
+
+            <span className="-mr-2.5 rounded-full bg-gray-100 p-1 px-2 shadow-xs ring-1 ring-background dark:bg-neutral-900/90 dark:ring-background/70">
+              {maskAddress(address!, 6).toUpperCase()}
+            </span>
+          </Button>
+        }
+        asChildTrigger
+      />
+    )
+  }
+
+  return (
+    <Button
+      variant={"secondary"}
+      onClick={() => open()}
+      className={cn("", className)}
+    >
+      Login
+    </Button>
+  )
+}

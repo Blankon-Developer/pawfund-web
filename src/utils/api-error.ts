@@ -14,7 +14,6 @@ export class ApiError extends Error {
   showToast(
     { title, description, ...options }: { title?: string } & ExternalToast = {
       title: this.message,
-      description: `${this.status}: ${this.code}`,
     }
   ): void {
     if (typeof window !== "undefined") {
