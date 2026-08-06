@@ -134,7 +134,7 @@ const siwxConfig: SIWXConfig = {
     const verifiedSessions = await Promise.all(
       sessions.map(async (session) => {
         try {
-          const verified = await getAuthMe(session.jwt)
+          const verified = await getAuthMe({ token: session.jwt })
 
           if (!verified) {
             throw new Error("Invalid session JWT.")

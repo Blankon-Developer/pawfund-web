@@ -1,11 +1,23 @@
-import { apiClient } from "@/lib/api-client"
+import { apiClient, ApiClientRequestOptions } from "@/lib/api-client"
 import { AuthMeData } from "../types/auth.types"
 
-const getAuthMe = async (token?: string) => {
-  const headers = token ? { Authorization: `Bearer ${token}` } : undefined
+type AuthMeParams = {
+  token?: string
+}
+
+const getAuthMe = async (
+  params: AuthMeParams,
+  options?: Omit<ApiClientRequestOptions, "method">
+) => {
+  const { token } = params
+  const bearerToken = token ? `Bearer ${token}` : null
 
   const res = await apiClient.get<AuthMeData>("/auth/me", {
-    headers,
+    headers: {
+      ...options?.headers,
+      ...(bearerToken ? { Authorization: bearerToken } : {}),
+    },
+    ...options,
   })
   return res.data
 }

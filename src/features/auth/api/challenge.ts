@@ -1,12 +1,20 @@
-import { apiClient } from "@/lib/api-client"
+import { apiClient, ApiClientRequestOptions } from "@/lib/api-client"
 
-const getChallenge = async (params: { address: string }) => {
+type ChallengeParams = {
+  address: string
+}
+
+const getChallenge = async (
+  params: ChallengeParams,
+  options?: Omit<ApiClientRequestOptions, "body" | "method">
+) => {
   const body = {
     address: params.address,
   }
   const res = await apiClient.post<{ challenge: string }, { address: string }>(
     "/auth/challenge",
-    body
+    body,
+    options
   )
   return res.data
 }

@@ -2,10 +2,10 @@
 
 import { ApiResponseType } from "@/types/api.types"
 import { ApiError, ApiValidationError } from "@/utils/api-error"
-import { buildApiUrl } from "@/utils/build-url"
+import { buildApiUrl, buildUrlWithParams } from "@/utils/build-url"
 import { toast } from "sonner"
 
-type RequestOptions = {
+type ApiClientRequestOptions = {
   method?: string
   headers?: Record<string, string>
   body?: any
@@ -21,11 +21,11 @@ type RequestOptions = {
   mode?: RequestMode
   priority?: RequestPriority
   credentials?: RequestCredentials
-  apiErrorToast?: boolean
+  defaultApiErrorToast?: boolean
 }
 
 // Create a separate function for getting server-side cookies that can be imported where needed
-export function getServerCookies() {
+function getServerCookies() {
   if (typeof window !== "undefined") return ""
 
   // Dynamic import next/headers only on server-side
@@ -45,17 +45,18 @@ export function getServerCookies() {
 
 async function fetchApi<T>(
   url: string,
-  options: RequestOptions = {}
+  options: ApiClientRequestOptions = {}
 ): Promise<ApiResponseType<T>> {
   const {
     method = "GET",
-    headers = {},
-    body,
-    cookie,
     params,
+    body,
+    headers = {},
+    cookie,
     cache = "no-store",
+    credentials = "same-origin",
     next,
-    apiErrorToast = true,
+    defaultApiErrorToast = false,
   } = options
 
   // Get cookies from the request when running on server
@@ -64,7 +65,9 @@ async function fetchApi<T>(
     cookieHeader = await getServerCookies()
   }
 
-  const fullUrl = buildApiUrl(url, params)
+  const fullUrl = url.startsWith("http")
+    ? buildUrlWithParams(url, params)
+    : buildApiUrl(url, params)
 
   try {
     const response = await fetch(fullUrl, {
@@ -77,7 +80,7 @@ async function fetchApi<T>(
         ...(cookieHeader ? { Cookie: cookieHeader } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
-      credentials: "include",
+      credentials,
       cache,
       next,
     })
@@ -99,7 +102,7 @@ async function fetchApi<T>(
   } catch (error) {
     if (typeof window !== "undefined") {
       if (error instanceof ApiError) {
-        if (apiErrorToast) error.showToast()
+        if (defaultApiErrorToast) error.showToast()
       } else if (error instanceof Error) {
         toast.error("Something went wrong", {
           description: `${error.name}: ${error.message}`,
@@ -114,35 +117,40 @@ async function fetchApi<T>(
   }
 }
 
-export const apiClient = {
-  get<T>(url: string, options?: RequestOptions): Promise<ApiResponseType<T>> {
+const apiClient = {
+  get<T>(
+    url: string,
+    options?: ApiClientRequestOptions
+  ): Promise<ApiResponseType<T>> {
     return fetchApi<T>(url, { ...options, method: "GET" })
   },
   post<TRes, TBody = any>(
     url: string,
     body?: TBody,
-    options?: RequestOptions
+    options?: ApiClientRequestOptions
   ): Promise<ApiResponseType<TRes>> {
     return fetchApi<TRes>(url, { ...options, method: "POST", body })
   },
   put<TRes, TBody = any>(
     url: string,
     body?: TBody,
-    options?: RequestOptions
+    options?: ApiClientRequestOptions
   ): Promise<ApiResponseType<TRes>> {
     return fetchApi<TRes>(url, { ...options, method: "PUT", body })
   },
   patch<TRes, TBody = any>(
     url: string,
     body?: TBody,
-    options?: RequestOptions
+    options?: ApiClientRequestOptions
   ): Promise<ApiResponseType<TRes>> {
     return fetchApi<TRes>(url, { ...options, method: "PATCH", body })
   },
   delete<T>(
     url: string,
-    options?: RequestOptions
+    options?: ApiClientRequestOptions
   ): Promise<ApiResponseType<T>> {
     return fetchApi<T>(url, { ...options, method: "DELETE" })
   },
 }
+
+export { apiClient, type ApiClientRequestOptions }
