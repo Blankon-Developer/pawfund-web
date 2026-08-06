@@ -18,6 +18,8 @@ const accounts: AuthMeData[] = [
     role: "FUNDRAISER",
     imageUrl:
       "https://picsum.photos/seed/0xF7E86ad7c0E09F3498381d2AaE5F66D3DB2b6Ea4/200",
+    isNotRegistered: false,
+    chainId: baseSepolia.id,
   },
   {
     address: "0xCbbE0715ea8A2FE659e46B51b0C0df0291D06D81",
@@ -25,27 +27,31 @@ const accounts: AuthMeData[] = [
     role: "SUPPORTER",
     imageUrl:
       "https://picsum.photos/seed/0xCbbE0715ea8A2FE659e46B51b0C0df0291D06D81/200",
+    isNotRegistered: false,
+    chainId: baseSepolia.id,
   },
 ]
 
-export const verify = http.post<never, { address: string; signature: string }>(
+export const verify = http.post<never, { signature: string; message: string }>(
   buildApiUrl("/auth/verify"),
   async ({ request }) => {
     const body = await request.clone().json()
 
-    if (!body.address || !body.signature) {
+    if (!body.signature || !body.message) {
       return HttpResponse.json<ApiErrorType>(
         {
           code: "BAD_REQUEST",
-          message: "Address and signature are required.",
+          message: "Signature and message are required.",
         },
         { status: 400 }
       )
     }
 
+    const address = body.message.match(/0x[a-fA-F0-9]{40}/)?.[0]
+
     const isValid = await client.verifyMessage({
-      address: body.address as `0x${string}`,
-      message: `nonce://${body.address}`,
+      address: address as `0x${string}`,
+      message: body.message,
       signature: body.signature as `0x${string}`,
     })
 
@@ -59,13 +65,15 @@ export const verify = http.post<never, { address: string; signature: string }>(
       )
     }
 
-    const account = accounts.find((acc) => acc.address === body.address)
+    const account = accounts.find((acc) => acc.address === address)
 
     const data: AuthMeData = {
       name: account?.name || null,
       role: account?.role || null,
       imageUrl: account?.imageUrl || null,
-      address: body.address,
+      address: address!,
+      isNotRegistered: account?.isNotRegistered ?? true,
+      chainId: account?.chainId || baseSepolia.id,
     }
 
     try {

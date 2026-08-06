@@ -4,28 +4,28 @@ import { CaipNetworkId } from "@reown/appkit/react"
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 
-type PawfundSession = SIWXSession & {
+type SIWXSessionsExtended = SIWXSession & {
   jwt: string
   user?: AuthMeData
 }
 
-type SessionsStoreType = {
-  sessions?: PawfundSession[]
-  addSession: (session: PawfundSession) => void
-  setSessions: (sessions: PawfundSession[]) => void
-  getSessions: (chainId: CaipNetworkId, address: string) => PawfundSession[]
+type SIWXSessionsStoreType = {
+  sessions?: SIWXSessionsExtended[]
+  addSession: (session: SIWXSessionsExtended) => void
+  setSessions: (sessions: SIWXSessionsExtended[]) => void
+  getSessions: (chainId: CaipNetworkId, address: string) => SIWXSessionsExtended[]
   revokeSession: (chainId: CaipNetworkId, address: string) => void
 }
 
-const useSessionsStore = create<SessionsStoreType>()(
+const useSiwxSessionsStore = create<SIWXSessionsStoreType>()(
   persist(
     (set, get) => ({
-      addSession: (session: PawfundSession) => {
+      addSession: (session: SIWXSessionsExtended) => {
         const currentSessions = get().sessions || []
         const updatedSessions = [session, ...currentSessions]
         set({ sessions: updatedSessions })
       },
-      setSessions: (sessions: PawfundSession[]) => {
+      setSessions: (sessions: SIWXSessionsExtended[]) => {
         set({ sessions })
       },
       getSessions: (chainId: CaipNetworkId, address: string) => {
@@ -55,4 +55,4 @@ const useSessionsStore = create<SessionsStoreType>()(
   )
 )
 
-export { useSessionsStore, type PawfundSession }
+export { useSiwxSessionsStore, type SIWXSessionsExtended }

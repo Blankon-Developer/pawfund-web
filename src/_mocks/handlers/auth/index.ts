@@ -1,5 +1,5 @@
-import { challenge } from "./challenge"
+import { message } from "./message"
 import { me } from "./me"
 import { verify } from "./verify"
 
-export const authHandlers = [challenge, verify, me]
+export const authHandlers = [message, verify, me]

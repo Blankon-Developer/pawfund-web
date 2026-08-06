@@ -5,4 +5,6 @@ export type AuthMeData = {
   role: Role | null
   imageUrl: string | null
   address: string
+  isNotRegistered: boolean
+  chainId: number
 }

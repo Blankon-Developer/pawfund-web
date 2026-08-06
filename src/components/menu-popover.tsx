@@ -1,7 +1,7 @@
 "use client"
 
-import { useSessionsStore } from "@/stores/sessions.store"
-import { useAppKit, useAppKitNetwork, useDisconnect } from "@reown/appkit/react"
+import { useSiweSessionStore } from "@/stores/siwe-session.store"
+import { useAppKit, useDisconnect } from "@reown/appkit/react"
 import {
   ArrowRightIcon,
   HandHeartIcon,
@@ -11,8 +11,6 @@ import {
   UserIcon,
   WalletIcon,
 } from "lucide-react"
-import { useMemo } from "react"
-import { useAccount } from "wagmi"
 import { Button } from "./shadcn-ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn-ui/popover"
 import { Separator } from "./shadcn-ui/separator"
@@ -28,18 +26,7 @@ export function MenuPopover({
   asChildTrigger,
   ...props
 }: MenuPopoverProps) {
-  const { address } = useAccount()
-  const sessionsStore = useSessionsStore((state) => state.sessions)
-  const getSession = useSessionsStore((state) => state.getSessions)
-  const { caipNetworkId } = useAppKitNetwork()
-
-  const currentSessions = useMemo(
-    () => (address && caipNetworkId ? getSession(caipNetworkId, address) : []),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [address, caipNetworkId, sessionsStore]
-  )
-
-  const session = currentSessions.length > 0 ? currentSessions[0] : null
+  const session = useSiweSessionStore((state) => state.session)
 
   return (
     <Popover {...props}>
@@ -59,7 +46,7 @@ export function MenuPopover({
       >
         {session?.user?.role === "FUNDRAISER" && <FundraiserMenuContent />}
         {session?.user?.role === "SUPPORTER" && <SupporterMenuContent />}
-        {!session?.user?.role && <UnregisteredMenuContent />}
+        {session?.user?.isNotRegistered && <UnregisteredMenuContent />}
       </PopoverContent>
     </Popover>
   )
@@ -110,7 +97,7 @@ function FundraiserMenuContent() {
       <MyWalletButton />
       <Button variant="ghost" className="w-full justify-start">
         <MegaphoneIcon />
-        MyCampaign
+        My Campaigns
       </Button>
       <Separator className="bg-muted" />
       <LogoutButton />

@@ -1,6 +1,9 @@
-import { getAuthMe, getChallenge, verifySignature } from "@/features/auth/"
+import { getAuthMe, getMessage, verifySignature } from "@/features/auth/"
 import { useJWTStore } from "@/stores/jwt.store"
-import { PawfundSession, useSessionsStore } from "@/stores/sessions.store"
+import {
+  SIWXSessionsExtended,
+  useSiwxSessionsStore,
+} from "@/stores/siwx-sessions.store"
 import { SIWXMessage } from "@reown/appkit-siwx"
 import { SIWXConfig } from "@reown/appkit/react"
 import { env } from "./env"
@@ -12,12 +15,12 @@ const siwxConfig: SIWXConfig = {
    */
   createMessage: async (input) => {
     try {
-      const response = await getChallenge({
+      const response = await getMessage({
         address: input.accountAddress,
       })
 
-      if (!response?.challenge) {
-        throw new Error("Failed to retrieve nonce from server.")
+      if (!response?.message) {
+        throw new Error("Failed to retrieve message from server.")
       }
 
       const message: SIWXMessage = {
@@ -25,7 +28,7 @@ const siwxConfig: SIWXConfig = {
         chainId: input.chainId,
         domain: env.NEXT_PUBLIC_BASE_URL.replace(/^https?:\/\//, ""),
         uri: env.NEXT_PUBLIC_BASE_URL,
-        nonce: response.challenge,
+        nonce: response.message,
         toString: () => {
           return message.nonce
         },
@@ -44,14 +47,14 @@ const siwxConfig: SIWXConfig = {
    * This function verifies the signature and adds the session to the store
    */
   addSession: async (session) => {
-    const exsistingSessions = useSessionsStore
+    const exsistingSessions = useSiwxSessionsStore
       .getState()
       .getSessions(session.data.chainId, session.data.accountAddress)
 
     try {
       const verified = await verifySignature({
-        address: session.data.accountAddress,
         signature: session.signature,
+        message: session.message,
       })
 
       if (!verified) {
@@ -63,12 +66,12 @@ const siwxConfig: SIWXConfig = {
       useJWTStore.getState().setToken(accessToken)
 
       if (exsistingSessions.length > 0) {
-        useSessionsStore
+        useSiwxSessionsStore
           .getState()
           .revokeSession(session.data.chainId, session.data.accountAddress)
       }
 
-      useSessionsStore.getState().addSession({
+      useSiwxSessionsStore.getState().addSession({
         ...session,
         jwt: accessToken,
         user,
@@ -85,16 +88,16 @@ const siwxConfig: SIWXConfig = {
    */
   setSessions: async (sessions) => {
     if (sessions.length === 0) {
-      useSessionsStore.getState().setSessions([])
+      useSiwxSessionsStore.getState().setSessions([])
       return
     }
 
-    const verifiedSessions: (PawfundSession | null)[] = await Promise.all(
+    const verifiedSessions: (SIWXSessionsExtended | null)[] = await Promise.all(
       sessions.map(async (session) => {
         try {
           const verified = await verifySignature({
-            address: session.data.accountAddress,
             signature: session.signature,
+            message: session.message,
           })
 
           if (!verified) {
@@ -116,10 +119,10 @@ const siwxConfig: SIWXConfig = {
     )
 
     const validSessions = verifiedSessions.filter(
-      (session): session is PawfundSession => session !== null
+      (session): session is SIWXSessionsExtended => session !== null
     )
 
-    useSessionsStore
+    useSiwxSessionsStore
       .getState()
       .setSessions(validSessions.map((session) => session))
   },
@@ -129,7 +132,9 @@ const siwxConfig: SIWXConfig = {
    * This function retrieves sessions from the store and verifies them
    */
   getSessions: async (chainId, address) => {
-    const sessions = useSessionsStore.getState().getSessions(chainId, address)
+    const sessions = useSiwxSessionsStore
+      .getState()
+      .getSessions(chainId, address)
 
     const verifiedSessions = await Promise.all(
       sessions.map(async (session) => {
@@ -150,7 +155,7 @@ const siwxConfig: SIWXConfig = {
     )
 
     const validSessions = verifiedSessions.filter(
-      (session): session is PawfundSession => session !== null
+      (session): session is SIWXSessionsExtended => session !== null
     )
     return validSessions
   },
@@ -160,7 +165,7 @@ const siwxConfig: SIWXConfig = {
    * This function removes the session from the store
    */
   revokeSession: async (chainId, address) => {
-    useSessionsStore.getState().revokeSession(chainId, address)
+    useSiwxSessionsStore.getState().revokeSession(chainId, address)
   },
 
   /*

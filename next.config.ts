@@ -7,10 +7,6 @@ const imagesRemotePatterns = env.IMAGES_REMOTE_PATTERNS.split(",")
   .map((pattern) => new URL(`${pattern}/**`))
 
 const nextConfig: NextConfig = {
-  webpack: (config) => {
-    config.externals.push("pino-pretty", "lokijs", "encoding")
-    return config
-  },
   images: {
     remotePatterns: imagesRemotePatterns,
   },

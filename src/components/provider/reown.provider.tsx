@@ -1,7 +1,7 @@
 "use client"
 
 import { env } from "@/lib/env"
-import { siwxConfig } from "@/lib/siwx-config"
+import { siweConfig } from "@/lib/siwe-config"
 import {
   networks,
   projectId,
@@ -39,7 +39,7 @@ createAppKit({
   themeVariables: {
     "--apkt-accent": "var(--primary)",
   },
-  siwx: siwxConfig,
+  siweConfig: siweConfig,
   tokens: {
     [`eip155:${baseSepolia.id}`]: {
       address: "0x036CbD53842c5426634e7929541eC2318f3dCF7e", // USDC Base Sepolia
@@ -74,7 +74,6 @@ function ReownDisconnectHandler({ children }: { children: React.ReactNode }) {
 
   const { status } = useAppKitAccount()
   const jwtToken = useJWTStore((state) => state.token)
-  console.log({jwtToken});
   const clearToken = useJWTStore((state) => state.clearToken)
   useEffect(() => {
     if (status === "disconnected") {

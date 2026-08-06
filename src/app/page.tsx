@@ -3,14 +3,8 @@ import { ToggleTheme } from "@/components/toggle-theme"
 import { H1, Text } from "@/components/typography"
 import { Button } from "@/shadcn-ui/button"
 import { ArrowRight } from "lucide-react"
-import { cookies } from "next/headers"
 
 export default async function Page() {
-  const cookieStore = await cookies()
-
-  const auth = cookieStore.get("@pawfund/jwt")
-
-  console.log(auth?.value)
   return (
     <main className="h-[200vh] min-h-svh space-y-6 p-6">
       <div className="sticky top-4   z-50 flex w-full items-center justify-between rounded-full bg-card p-2">

@@ -2,18 +2,18 @@ import { apiClient, ApiClientRequestOptions } from "@/lib/api-client"
 import { AuthMeData } from "../types/auth.types"
 
 type VerifySignatureParams = {
-  address: string
   signature: string
+  message: string
 }
 
 const verifySignature = async (
   params: VerifySignatureParams,
   options?: Omit<ApiClientRequestOptions, "body" | "method">
 ) => {
-  const { address, signature } = params
+  const { signature, message } = params
   const body: VerifySignatureParams = {
-    address: address,
-    signature: signature,
+    signature,
+    message,
   }
   const res = await apiClient.post<
     AuthMeData & {
