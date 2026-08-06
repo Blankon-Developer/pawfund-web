@@ -35,11 +35,12 @@ const jwtStorage: StateStorage = {
     }
 
     const parsed = JSON.parse(value)
+    const token = parsed?.state?.token
 
     document.cookie = [
-      `${name}=${encodeURIComponent(parsed.state.token)}`,
+      `${name}=${encodeURIComponent(token)}`,
       "Path=/",
-      "Max-Age=31536000",
+      "Max-Age=Session",
       "SameSite=Lax",
     ].join("; ")
   },
@@ -55,7 +56,7 @@ const jwtStorage: StateStorage = {
 const useJWTStore = create<JWTStore>()(
   persist(
     (set) => ({
-      clearToken: () => set({ token: null }),
+      clearToken: () => set({ token: "" }),
       setToken: (token: string) => set({ token }),
     }),
     {

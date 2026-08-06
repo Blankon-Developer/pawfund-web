@@ -1,29 +1,24 @@
 "use client"
 
+import { USDCIcon } from "@/assets/usdc.icon"
 import { useErc20TokenBalance } from "@/hooks/erc20-token-balance"
 import { cn } from "@/utils"
 import { maskAddress } from "@/utils/mask-address"
 import { useAppKit } from "@reown/appkit/react"
 import { useAccount } from "wagmi"
+import { MenuPopover } from "./menu-popover"
 import { Button } from "./shadcn-ui/button"
 import { Skeleton } from "./shadcn-ui/skeleton"
-import { USDCIcon } from "@/assets/usdc.icon"
-import { MenuPopover } from "./menu-popover"
-import { useEffect } from "react"
 
 export function LoginButton({ className }: { className?: string }) {
   const { open } = useAppKit()
-  const { address, isConnected, isDisconnected } = useAccount()
+  const { address, isConnected } = useAccount()
 
   const { data: balanceData, isLoading: isBalanceLoading } =
     useErc20TokenBalance({
       balanceOf: address as `0x${string}`,
       tokenAddress: "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
     })
-
-    useEffect(()=> {
-
-    }, [isDisconnected])
 
   if (isConnected) {
     return (

@@ -8,10 +8,12 @@ import {
   wagmiAdapter,
   wagmiConfig,
 } from "@/lib/wagmi-adapter"
+import { useJWTStore } from "@/stores/jwt.store"
 import { baseSepolia } from "@reown/appkit/networks"
 import type { Metadata as ReownMetadata } from "@reown/appkit/react"
-import { createAppKit } from "@reown/appkit/react"
-import { type ReactNode } from "react"
+import { createAppKit, useAppKitAccount } from "@reown/appkit/react"
+import { QueryClientContext } from "@tanstack/react-query"
+import { useContext, useEffect } from "react"
 import { cookieToInitialState, WagmiProvider } from "wagmi"
 
 // Set up metadata
@@ -49,7 +51,7 @@ function ReownProvider({
   children,
   cookies,
 }: {
-  children: ReactNode
+  children: React.ReactNode
   cookies: string | null
 }) {
   const initialState = cookieToInitialState(wagmiConfig, cookies)
@@ -61,4 +63,27 @@ function ReownProvider({
   )
 }
 
-export { ReownProvider }
+function ReownDisconnectHandler({ children }: { children: React.ReactNode }) {
+  const queryClient = useContext(QueryClientContext)
+
+  if (!queryClient) {
+    throw new Error(
+      "ReownDisconnectHandler must be used within a ReactQueryProvider"
+    )
+  }
+
+  const { status } = useAppKitAccount()
+  const jwtToken = useJWTStore((state) => state.token)
+  console.log({jwtToken});
+  const clearToken = useJWTStore((state) => state.clearToken)
+  useEffect(() => {
+    if (status === "disconnected") {
+      if (jwtToken) clearToken()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status])
+
+  return <>{children}</>
+}
+
+export { ReownDisconnectHandler, ReownProvider }

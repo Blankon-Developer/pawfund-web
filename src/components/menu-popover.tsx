@@ -11,13 +11,12 @@ import {
   UserIcon,
   WalletIcon,
 } from "lucide-react"
+import { useMemo } from "react"
 import { useAccount } from "wagmi"
 import { Button } from "./shadcn-ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn-ui/popover"
 import { Separator } from "./shadcn-ui/separator"
 import { Text } from "./typography"
-import { useMemo } from "react"
-import { useJWTStore } from "@/stores/jwt.store"
 
 type MenuPopoverProps = {
   trigger?: React.ReactElement
@@ -82,9 +81,7 @@ function MyWalletButton() {
 
 function LogoutButton() {
   const { disconnect } = useDisconnect()
-  const clearToken = useJWTStore((state) => state.clearToken)
   const handleLogout = () => {
-    clearToken()
     disconnect()
   }
   return (

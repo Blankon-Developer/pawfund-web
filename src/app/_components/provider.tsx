@@ -1,6 +1,9 @@
 import { MSWProvider } from "@/components/provider/msw.provider"
 import { ReactQueryProvider } from "@/components/provider/react-query.provider"
-import { ReownProvider } from "@/components/provider/reown.provider"
+import {
+  ReownProvider,
+  ReownDisconnectHandler,
+} from "@/components/provider/reown.provider"
 import { ThemeProvider } from "@/components/provider/theme.provider"
 import { Toaster } from "@/shadcn-ui/sonner"
 import { headers } from "next/headers"
@@ -17,10 +20,12 @@ export default async function RootProvider({
     <MSWProvider>
       <ReownProvider cookies={cookies}>
         <ReactQueryProvider>
-          <ThemeProvider>
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <ReownDisconnectHandler>
+            <ThemeProvider>
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </ReownDisconnectHandler>
         </ReactQueryProvider>
       </ReownProvider>
     </MSWProvider>
