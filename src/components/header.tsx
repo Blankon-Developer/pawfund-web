@@ -16,8 +16,11 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-4 z-50 mx-auto mt-4 flex w-[calc(100%-1rem)] min-w-62.5 items-center justify-between rounded-full bg-card p-2 pl-5 sm:w-[calc(100%-2rem)]">
-      <Link href={"/"}>
+    <header className="sticky top-4 z-50 mx-auto mt-4 flex w-[calc(100%-1rem)] max-w-360 min-w-62.5 items-center justify-between rounded-full bg-card p-2 pl-5 sm:w-[calc(100%-2rem)]">
+      <Link href={"/"} className="relative">
+        <span className="absolute right-0.5 -bottom-2.25 rounded-full bg-amber-500 px-1.5 text-[9px] font-extrabold text-white">
+          Testnet
+        </span>
         <Image
           src="/pawfund-text-logo.svg"
           alt="Pawfund Logo"
