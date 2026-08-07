@@ -34,7 +34,10 @@ function useErc20TokenBalance({
 
   const formatedBalance =
     balance !== undefined && decimals !== undefined
-      ? formatUnits(balance, decimals)
+      ? new Intl.NumberFormat("en-US", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 2,
+        }).format(Number(formatUnits(balance, decimals)))
       : "-"
   return {
     data: { balance, decimals, symbol, formatedBalance },

@@ -1,12 +1,12 @@
 "use client"
 
 import { cn } from "@/utils/cn"
+import { useAppKitTheme } from "@reown/appkit/react"
+import { VariantProps } from "class-variance-authority"
 import { MoonIcon, SunIcon } from "lucide-react"
 import { useTheme } from "next-themes"
-import { Button, buttonVariants } from "./shadcn-ui/button"
-import { VariantProps } from "class-variance-authority"
 import { useEffect, useState } from "react"
-import { useAppKitTheme } from "@reown/appkit/react"
+import { Button, buttonVariants } from "./shadcn-ui/button"
 
 export function ToggleTheme({
   variant = "outline",
@@ -36,7 +36,8 @@ export function ToggleTheme({
 
   if (!mounted)
     return (
-      <Button size={size} variant={variant}>
+      <Button size={size} variant={variant} className="relative">
+        <SunIcon />
         <span className="sr-only">Toggle theme</span>
       </Button>
     )

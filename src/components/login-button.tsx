@@ -26,19 +26,19 @@ export function LoginButton({ className }: { className?: string }) {
         trigger={
           <Button
             variant={"secondary"}
-            className={cn("bg-gray-200 dark:bg-secondary", className)}
+            className={cn("bg-gray-200 px-1.5 dark:bg-secondary", className)}
           >
             {isBalanceLoading ? (
-              <Skeleton className="h-3 w-16 bg-gray-100 dark:bg-neutral-900/90" />
+              <Skeleton className="hidden h-3 w-16 bg-gray-100 sm:block dark:bg-neutral-900/90" />
             ) : (
-              <div className="-ml-1.5 flex items-center gap-0.5">
+              <div className="ml-0.5 hidden items-center gap-0.5 sm:flex">
                 <USDCIcon className="size-5.5 text-gray-700 dark:text-neutral-300" />
                 <span>{`${balanceData?.formatedBalance} ${balanceData?.symbol}`}</span>
               </div>
             )}
 
-            <span className="-mr-2.5 rounded-full bg-gray-100 p-1 px-2 shadow-xs ring-1 ring-background dark:bg-neutral-900/90 dark:ring-background/70">
-              {maskAddress(address!, 6).toUpperCase()}
+            <span className="rounded-full p-1 px-2 shadow-xs sm:bg-gray-100 sm:ring-1 sm:ring-background dark:sm:bg-neutral-900/90 dark:sm:ring-background/70">
+              {maskAddress(address!).toUpperCase()}
             </span>
           </Button>
         }

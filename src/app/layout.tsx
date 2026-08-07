@@ -4,6 +4,8 @@ import { Geist_Mono, Space_Grotesk } from "next/font/google"
 
 import { cn } from "@/utils"
 import RootProvider from "./_components/provider"
+import { mainMetadata } from "@/constants/page-metadata"
+import { Header } from "@/components/header"
 
 const fontHeading = Space_Grotesk({
   subsets: ["latin"],
@@ -20,12 +22,13 @@ const fontMono = Geist_Mono({
   variable: "--font-mono",
 })
 
+export const metadata = mainMetadata
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-
   return (
     <html
       lang="en"
@@ -39,7 +42,10 @@ export default async function RootLayout({
       )}
     >
       <body>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider>
+          <Header />
+          {children}
+        </RootProvider>
       </body>
     </html>
   )
