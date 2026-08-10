@@ -7,6 +7,7 @@ import RootProvider from "./_components/provider"
 import { mainMetadata } from "@/constants/page-metadata"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { TooltipProvider } from "@/shadcn-ui/tooltip"
 
 const fontHeading = Space_Grotesk({
   subsets: ["latin"],
@@ -44,9 +45,11 @@ export default async function RootLayout({
     >
       <body>
         <RootProvider>
-          <Header />
-          {children}
-          <Footer />
+          <TooltipProvider>
+            <Header />
+            {children}
+            <Footer />
+          </TooltipProvider>
         </RootProvider>
       </body>
     </html>

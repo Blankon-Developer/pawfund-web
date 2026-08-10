@@ -9,7 +9,17 @@ export type CampaignItem = {
   donorCount: number
   campaignImageUrl: string
   fundraiserImageUrl: string
+  /**
+   * The date and time when the campaign ends, in ISO 8601 format.
+   * Example:
+   * "2023-12-31T23:59:59Z"
+   */
   endAt: string
+  /**
+   * The date and time when the campaign was created, in ISO 8601 format.
+   * Example:
+   * "2023-12-31T23:59:59Z"
+   */
   createdAt: string
   contractAddress: string
   status: CampaignStatus

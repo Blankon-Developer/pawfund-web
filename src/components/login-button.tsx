@@ -33,7 +33,8 @@ export function LoginButton({ className }: { className?: string }) {
             ) : (
               <div className="ml-0.5 hidden items-center gap-0.5 sm:flex">
                 <USDCIcon className="size-5.5 text-gray-700 dark:text-neutral-300" />
-                <span>{`${balanceData?.formatedBalance} ${balanceData?.symbol}`}</span>
+                <span className="">{balanceData?.formatedBalance}</span>
+                <span className="text-muted-foreground">{balanceData?.symbol}</span>
               </div>
             )}
 

@@ -26,7 +26,7 @@ export function Header() {
           alt="Pawfund Logo"
           width={110}
           height={26}
-          className="drop-shadow-xs"
+          className="drop-shadow-xs h-auto w-28"
         />
       </Link>
       {/* <ToggleTheme variant={"ghost"} /> */}
