@@ -1,6 +1,6 @@
 import "./globals.css"
 
-import { Geist_Mono, Space_Grotesk } from "next/font/google"
+import { Bagel_Fat_One, Geist_Mono, Space_Grotesk } from "next/font/google"
 
 import { cn } from "@/utils"
 import RootProvider from "./_components/provider"
@@ -9,9 +9,10 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { TooltipProvider } from "@/shadcn-ui/tooltip"
 
-const fontHeading = Space_Grotesk({
+const fontHeading = Bagel_Fat_One({
   subsets: ["latin"],
   variable: "--font-heading",
+  weight: "400",
 })
 
 const fontSans = Space_Grotesk({

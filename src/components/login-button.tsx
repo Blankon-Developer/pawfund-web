@@ -1,6 +1,6 @@
 "use client"
 
-import { USDCIcon } from "@/assets/usdc.icon"
+import { USDCIcon } from "@/assets/icons/usdc"
 import { useErc20TokenBalance } from "@/hooks/erc20-token-balance"
 import { cn } from "@/utils"
 import { maskAddress } from "@/utils/mask-address"

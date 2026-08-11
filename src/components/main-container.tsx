@@ -10,7 +10,7 @@ export function MainContainer({
   return (
     <div
       className={cn(
-        "mx-auto min-h-svh w-full max-w-360 px-4 sm:px-6",
+        "mx-auto min-h-svh w-[calc(100%-1rem)] max-w-360 sm:w-[calc(100%-2rem)]",
         className
       )}
       {...props}

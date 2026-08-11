@@ -6,8 +6,8 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import HalfCircle from "@/assets/half-circle.svg"
 import { cn } from "@/utils/cn"
-import { ArrowTopRightShape } from "@/assets/arrow-top-right-shape.icon"
-import { PawCircular } from "@/assets/paw-circular.icon"
+import { ArrowTopRightShape } from "@/assets/shape/arrow-top-right"
+import { PawCircular } from "@/assets/icons/paw-circular"
 import { ToggleTheme } from "./toggle-theme"
 
 const hideFooterPaths: Route[] = []
