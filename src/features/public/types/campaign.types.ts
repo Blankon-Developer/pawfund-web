@@ -1,6 +1,6 @@
 export type CampaignStatus = "ACTIVE" | "COMPLETED" | "CANCELLED"
 
-export type CampaignItem = {
+export type CampaignItemData = {
   id: string
   title: string
   shortDescription: string
@@ -25,7 +25,7 @@ export type CampaignItem = {
   status: CampaignStatus
 }
 
-export type CampaignDetail = {
+export type CampaignDetailData = {
   id: string
   title: string
   shortDescription: string

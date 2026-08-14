@@ -1,9 +1,9 @@
-import type { CampaignItem, CampaignStatus } from "@/features/public"
+import type { CampaignItemData, CampaignStatus } from "@/features/public"
 import { ApiSuccessType } from "@/types/api.types"
 import { buildApiUrl } from "@/utils/build-url"
 import { http, HttpResponse } from "msw"
 
-export function generateCampaigns(count: number): CampaignItem[] {
+export function generateCampaigns(count: number): CampaignItemData[] {
   return Array.from({ length: count }, (_, index) => {
     const goalAmount = 10_000_000 + index * 5_000_000
     const progress = Math.random()
@@ -33,7 +33,7 @@ export function generateCampaigns(count: number): CampaignItem[] {
 }
 
 export const getCampaigns = http.get(buildApiUrl("/campaigns"), () => {
-  return HttpResponse.json<ApiSuccessType<CampaignItem[]>>(
+  return HttpResponse.json<ApiSuccessType<CampaignItemData[]>>(
     {
       code: "SUCCESS",
       message: "Campaigns fetched successfully.",

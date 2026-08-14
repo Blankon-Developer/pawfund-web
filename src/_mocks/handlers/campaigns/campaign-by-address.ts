@@ -1,4 +1,4 @@
-import type { CampaignDetail } from "@/features/public"
+import type { CampaignDetailData } from "@/features/public"
 import { ApiSuccessType } from "@/types/api.types"
 import { buildApiUrl } from "@/utils/build-url"
 import { http, HttpResponse } from "msw"
@@ -7,7 +7,7 @@ export const getCampaignByAddress = http.get<{ address: string }>(
   buildApiUrl("/campaigns/:address"),
   (req) => {
     const { address } = req.params
-    return HttpResponse.json<ApiSuccessType<CampaignDetail>>(
+    return HttpResponse.json<ApiSuccessType<CampaignDetailData>>(
       {
         code: "SUCCESS",
         message: "Campaigns fetched successfully.",

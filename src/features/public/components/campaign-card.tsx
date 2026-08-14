@@ -8,9 +8,9 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shadcn-ui/tooltip"
 import { cn } from "@/utils"
 import * as formatDate from "@/utils/format-date"
 
-import { CampaignItem } from "../types/campaign.types"
+import { CampaignItemData } from "../types/campaign.types"
 
-type CampaignCardProps = Omit<CampaignItem, "status" | "createdAt" | "id"> & {
+type CampaignCardProps = Omit<CampaignItemData, "status" | "createdAt" | "id"> & {
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 

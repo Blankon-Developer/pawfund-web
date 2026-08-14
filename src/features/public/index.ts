@@ -13,6 +13,6 @@ export {
 // Types
 export type {
   CampaignStatus,
-  CampaignItem,
-  CampaignDetail,
+  CampaignItemData,
+  CampaignDetailData,
 } from "./types/campaign.types"
