@@ -56,6 +56,8 @@
   --color-success-foreground: var(--success-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-invert: var(--invert);
+  --color-invert-foreground: var(--invert-foreground);
 }
 
 :root {
@@ -74,7 +76,7 @@
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+  --input: oklch(1 0 0);
   --ring: oklch(0.708 0 0);
   --chart-1: oklch(0.837 0.128 66.29);
   --chart-2: oklch(0.705 0.213 47.604);
@@ -102,6 +104,8 @@
   --success-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.985 0 0);
+  --invert: var(--color-gray-900);
+  --invert-foreground: var(--color-gray-50);
 }
 
 .dark {
@@ -120,7 +124,7 @@
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --input: var(--color-neutral-950);
   --ring: oklch(0.556 0 0);
   --chart-1: oklch(0.837 0.128 66.29);
   --chart-2: oklch(0.705 0.213 47.604);
@@ -147,6 +151,8 @@
   --success-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.650 0.191 22.216);
   --destructive-foreground: oklch(0.985 0 0);
+  --invert: var(--color-neutral-700);
+  --invert-foreground: var(--color-neutral-50);
 }
 
 @layer base {
