@@ -6,7 +6,7 @@ import { LoginButton } from "./login-button"
 import { usePathname } from "next/navigation"
 import { Route } from "next"
 
-const hideHeaderPaths: Route[] = []
+const hideHeaderPaths: Route[] = ["/register"]
 
 export function Header() {
   const pathname = usePathname()

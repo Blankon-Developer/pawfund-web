@@ -8,14 +8,14 @@ export function MainContainer({
   ...props
 }: MainContainerProps) {
   return (
-    <div
+    <main
       className={cn(
-        "mx-auto min-h-svh w-[calc(100%-1rem)] max-w-360 sm:w-[calc(100%-2rem)]",
+        "mx-auto min-h-[calc(100vh-14.8rem)] w-[calc(100%-1.5rem)] max-w-360 sm:w-[calc(100%-2.5rem)]",
         className
       )}
       {...props}
     >
       {children}
-    </div>
+    </main>
   )
 }

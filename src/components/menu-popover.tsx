@@ -15,6 +15,7 @@ import { Button } from "./shadcn-ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "./shadcn-ui/popover"
 import { Separator } from "./shadcn-ui/separator"
 import { Text } from "./typography"
+import Link from "next/link"
 
 type MenuPopoverProps = {
   trigger?: React.ReactElement
@@ -129,10 +130,12 @@ function UnregisteredMenuContent() {
       <Text variant={"label"} className="mt-2 mb-1 ml-2 text-muted-foreground">
         You are not registered yet.
       </Text>
-      <Button variant={"secondary"} className="w-full justify-start">
-        <UserIcon strokeWidth={2.5} />
-        Register
-        <ArrowRightIcon className="ml-auto" />
+      <Button asChild variant={"secondary"} className="w-full justify-start">
+        <Link href={"/register"}>
+          <UserIcon strokeWidth={2.5} />
+          Register
+          <ArrowRightIcon className="ml-auto" />
+        </Link>
       </Button>
       <MyWalletButton />
       <Separator className="bg-muted" />
