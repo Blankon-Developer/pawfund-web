@@ -1,4 +1,5 @@
-import { getMessage, verifySignature } from "@/features/auth"
+import { getAuthMe, getMessage, verifySignature } from "@/features/auth"
+import { useJWTStore } from "@/stores/jwt.store"
 import { useSiweSessionStore } from "@/stores/siwe-session.store"
 import type {
   SIWECreateMessageArgs,
@@ -7,6 +8,8 @@ import type {
 } from "@reown/appkit-siwe"
 import { createSIWEConfig } from "@reown/appkit-siwe"
 import { baseSepolia } from "viem/chains"
+import { queryClient } from "./react-query"
+import { getAuthMeQueryOptions } from "@/features/auth"
 
 const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
@@ -34,15 +37,36 @@ const siweConfig = createSIWEConfig({
     return message
   },
   getSession: async () => {
-    const session = useSiweSessionStore.getState().getSession()
-    if (!session) {
+    try {
+      const session = useSiweSessionStore.getState().getSession()
+      if (!session) {
+        return null
+      }
+      const authMe = await queryClient
+        .fetchQuery({
+          queryKey: getAuthMeQueryOptions({ token: session.jwt }).queryKey,
+          queryFn: () => getAuthMe({ token: session.jwt }),
+          staleTime: 5 * 60 * 1000,
+        })
+        .then((res) => {
+          if (!res) return null
+          useJWTStore.getState().setToken(session.jwt)
+          console.log({ res })
+
+          return {
+            address: res.address,
+            chainId: res.chainId,
+          } satisfies SIWESession
+        })
+        .catch((err) => {
+          throw err
+        })
+
+      return authMe
+    } catch (error) {
+      console.error("Error getting SIWE session:", error)
       return null
     }
-
-    return {
-      address: session.address,
-      chainId: session.chainId,
-    } satisfies SIWESession
   },
   verifyMessage: async ({ message, signature }: SIWEVerifyMessageArgs) => {
     try {
@@ -57,6 +81,7 @@ const siweConfig = createSIWEConfig({
       })
 
       const addSession = useSiweSessionStore.getState().addSession
+      useJWTStore.getState().setToken(accessToken)
 
       addSession({
         address: user.address,
@@ -74,6 +99,7 @@ const siweConfig = createSIWEConfig({
   signOut: async () => {
     try {
       useSiweSessionStore.getState().removeSession()
+      useJWTStore.getState().clearToken()
       return true
     } catch (error) {
       console.error("Error signing out:", error)

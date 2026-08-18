@@ -6,7 +6,7 @@ export type {
 } from "./components/register-forms"
 
 // api
-export { getAuthMe } from "./api/auth-me"
+export { getAuthMe, getAuthMeQueryOptions, useGetAuthMe } from "./api/auth-me"
 export { getMessage } from "./api/message"
 export { verifySignature } from "./api/verify-signature"
 
