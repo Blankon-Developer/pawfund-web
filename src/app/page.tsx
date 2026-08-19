@@ -8,7 +8,7 @@ import {
 export default async function Page() {
   return (
     <MainContainer>
-      <HeroSection className="-mt-14" />
+      <HeroSection className="-mt-13 sm:-mt-14.5" />
       <IntermezzoSection />
       <OverviewSection />
     </MainContainer>
