@@ -51,7 +51,6 @@ const siweConfig = createSIWEConfig({
         .then((res) => {
           if (!res) return null
           useJWTStore.getState().setToken(session.jwt)
-          console.log({ res })
 
           return {
             address: res.address,
@@ -69,6 +68,7 @@ const siweConfig = createSIWEConfig({
     }
   },
   verifyMessage: async ({ message, signature }: SIWEVerifyMessageArgs) => {
+    console.log("VERIFY MESSAGE")
     try {
       const { accessToken, ...user } = await verifySignature({
         signature: signature,
@@ -82,6 +82,9 @@ const siweConfig = createSIWEConfig({
 
       const addSession = useSiweSessionStore.getState().addSession
       useJWTStore.getState().setToken(accessToken)
+      queryClient.invalidateQueries({
+        queryKey: getAuthMeQueryOptions().queryKey,
+      })
 
       addSession({
         address: user.address,

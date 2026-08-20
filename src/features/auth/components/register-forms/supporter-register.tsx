@@ -27,9 +27,13 @@ import { useRegistrationStore } from "../../stores/registration.store"
 import type { FileWithPreview } from "@/hooks/file-upload"
 import { RegisterPreviewItem } from "./register-preview-item"
 import { TermsCheckbox, useTermsCheckForm } from "./terms-checkbox"
+
 const supporterRegisterSchema = z.object({
   name: z.string().min(1, "Full name is required."),
-  email: z.email("Please enter a valid email address."),
+  email: z
+    .string()
+    .min(1, "Email is required.")
+    .email("Please enter a valid email address."),
   avatar: z.custom<FileWithPreview>().nullish(),
 })
 

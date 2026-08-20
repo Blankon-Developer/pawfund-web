@@ -19,7 +19,7 @@ export type FileMetadata = {
 }
 
 export type FileWithPreview = {
-  file: File | FileMetadata
+  file: FileMetadata | File
   id: string
   preview?: string
 }

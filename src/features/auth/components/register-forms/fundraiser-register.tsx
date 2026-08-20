@@ -48,7 +48,10 @@ import { TermsCheckbox, useTermsCheckForm } from "./terms-checkbox"
 
 const fundraiserRegisterSchema = z.object({
   name: z.string().min(1, "Fundraiser name is required."),
-  email: z.email("Please enter a valid email address."),
+  email: z
+    .string()
+    .min(1, "Email is required.")
+    .email("Please enter a valid email address."),
   contactPerson: z.object({
     name: z.string().min(1, "Please enter contact person's name."),
     phone: z
@@ -56,7 +59,7 @@ const fundraiserRegisterSchema = z.object({
       .min(1, "Please enter contact person's phone number.")
       .regex(/^\+[1-9]\d{1,14}$/, "Please enter a valid phone number"),
   }),
-  socialUrl: z.url("Please enter a valid URL."),
+  socialUrl: z.httpUrl("Please enter a valid URL."),
   country: z.string().min(1, "Please select a country."),
   zipCode: z.string().min(1, "Please enter your zip code."),
   avatar: z.custom<FileWithPreview>().nullish(),

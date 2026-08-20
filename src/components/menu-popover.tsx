@@ -16,6 +16,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "./shadcn-ui/popover"
 import { Separator } from "./shadcn-ui/separator"
 import { Text } from "./typography"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { Route } from "next"
+import { useState } from "react"
 
 type MenuPopoverProps = {
   trigger?: React.ReactElement
@@ -28,9 +31,10 @@ export function MenuPopover({
   ...props
 }: MenuPopoverProps) {
   const session = useSiweSessionStore((state) => state.session)
+  const [open, setOpen] = useState<boolean | undefined>(props.open)
 
   return (
-    <Popover {...props}>
+    <Popover open={open} onOpenChange={setOpen} {...props}>
       {trigger && (
         <PopoverTrigger asChild={asChildTrigger}>{trigger}</PopoverTrigger>
       )}
@@ -45,8 +49,12 @@ export function MenuPopover({
           }
         }}
       >
-        {session?.user?.role === "FUNDRAISER" && <FundraiserMenuContent />}
-        {session?.user?.role === "SUPPORTER" && <SupporterMenuContent />}
+        {session?.user?.role === "FUNDRAISER" && (
+          <FundraiserMenuContent onNavigate={() => setOpen(false)} />
+        )}
+        {session?.user?.role === "SUPPORTER" && (
+          <SupporterMenuContent onNavigate={() => setOpen(false)} />
+        )}
         {session?.user?.isNotRegistered && <UnregisteredMenuContent />}
       </PopoverContent>
     </Popover>
@@ -84,14 +92,24 @@ function LogoutButton() {
   )
 }
 
-function FundraiserMenuContent() {
+function FundraiserMenuContent({ onNavigate }: { onNavigate?: () => void }) {
+  const router = useRouter()
+  const navigate = (href: Route) => {
+    onNavigate?.()
+    router.push(href)
+  }
+
   return (
     <div className="flex flex-col gap-1">
       <Button variant={"outline"}>
         <PlusIcon />
         Create Campaign
       </Button>
-      <Button variant="ghost" className="w-full justify-start">
+      <Button
+        onClick={() => navigate("/account")}
+        variant="ghost"
+        className="w-full justify-start"
+      >
         <UserIcon />
         Account
       </Button>
@@ -106,10 +124,19 @@ function FundraiserMenuContent() {
   )
 }
 
-function SupporterMenuContent() {
+function SupporterMenuContent({ onNavigate }: { onNavigate?: () => void }) {
+  const router = useRouter()
+  const navigate = (href: Route) => {
+    onNavigate?.()
+    router.push(href)
+  }
   return (
     <div className="flex flex-col gap-1">
-      <Button variant="ghost" className="w-full justify-start">
+      <Button
+        onClick={() => navigate("/account")}
+        variant="ghost"
+        className="w-full justify-start"
+      >
         <UserIcon />
         Account
       </Button>

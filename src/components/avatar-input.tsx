@@ -17,21 +17,24 @@ interface AvatarInputProps {
   className?: string
   onFileChange?: (file: FileWithPreview | null) => void
   defaultAvatar?: string
+  value?: FileWithPreview
   showErrorAlert?: boolean
   label?: string | React.ReactNode
   onError?: (errors: string[]) => void
   "aria-invalid"?: boolean
+  hideInstruction?: boolean
 }
 
 export function AvatarInput({
   maxSize = 2 * 1024 * 1024, // 2MB
   className,
   onFileChange,
-  defaultAvatar,
+  value,
   showErrorAlert = true,
   onError,
   label,
   "aria-invalid": ariaInvalid,
+  hideInstruction,
 }: AvatarInputProps) {
   const [
     { files, isDragging, errors },
@@ -58,7 +61,7 @@ export function AvatarInput({
   })
 
   const currentFile = files[0]
-  const previewUrl = currentFile?.preview || defaultAvatar
+  const previewUrl = value?.preview || currentFile?.preview
 
   const handleRemove = () => {
     if (currentFile) {
@@ -95,12 +98,11 @@ export function AvatarInput({
               height={96}
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center">
-              <UserRoundIcon className="size-6 text-muted-foreground" />
+            <div className="flex h-full w-full flex-col items-center justify-center">
+              <UserRoundIcon className="size-7 fill-muted-foreground/10 text-muted-foreground" />
             </div>
           )}
         </div>
-
         {/* Remove Button - only show when file is uploaded */}
         {currentFile && (
           <Button
@@ -116,19 +118,21 @@ export function AvatarInput({
       </div>
 
       {/* Upload Instructions */}
-      <div className="gap-0.5 text-center flex flex-col">
-        <span
-          className={cn(
-            "text-sm font-medium",
-            ariaInvalid && "text-destructive"
-          )}
-        >
-          {label || "Avatar"}
-        </span>
-        <span className="text-xs text-muted-foreground">
-          PNG, JPG up to {formatBytes(maxSize)}
-        </span>
-      </div>
+      {!hideInstruction && (
+        <div className="flex flex-col gap-0.5 text-center">
+          <span
+            className={cn(
+              "text-sm font-medium",
+              ariaInvalid && "text-destructive"
+            )}
+          >
+            {label || "Avatar"}
+          </span>
+          <span className="text-xs text-muted-foreground">
+            PNG, JPG up to {formatBytes(maxSize)}
+          </span>
+        </div>
+      )}
 
       {/* Error Messages */}
       {errors.length > 0 && showErrorAlert && (

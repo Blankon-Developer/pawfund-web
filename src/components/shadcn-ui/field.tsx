@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/utils/index"
 import { Label } from "@/components/shadcn-ui/label"
 import { Separator } from "@/components/shadcn-ui/separator"
+import { InfoIcon } from "lucide-react"
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
@@ -128,7 +129,12 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
+function FieldDescription({
+  className,
+  icon = false,
+  children,
+  ...props
+}: React.ComponentProps<"p"> & { icon?: boolean }) {
   return (
     <p
       data-slot="field-description"
@@ -136,10 +142,14 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
         "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5",
         "last:mt-0 nth-last-2:-mt-1",
         "[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary",
+        "flex items-center",
         className
       )}
       {...props}
-    />
+    >
+      {icon && <InfoIcon size={12} className="mr-1 mb-px" />}
+      {children}
+    </p>
   )
 }
 

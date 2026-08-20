@@ -19,7 +19,7 @@ export function Header() {
     <header className="sticky top-4 z-50 mx-auto mt-10 flex h-10 w-[calc(100%-1.5rem)] max-w-360 min-w-62.5 items-center justify-between rounded-full bg-transparent px-3 sm:w-[calc(100%-2.5rem)] sm:px-5">
       <Link
         href={"/"}
-        className="relative flex h-10 items-center rounded-full bg-gray-200 px-3 shadow-md ring-2 ring-background dark:bg-secondary dark:ring-background/30"
+        className="relative flex h-10 items-center rounded-full bg-gray-200 px-3 shadow-md ring-2 ring-background dark:bg-secondary dark:shadow-none dark:ring-0"
       >
         <span className="absolute right-3 -bottom-0.5 rounded-full bg-amber-500 px-1.5 text-[9px] font-extrabold text-white">
           Testnet
@@ -34,7 +34,7 @@ export function Header() {
       </Link>
       {/* <ToggleTheme variant={"ghost"} /> */}
       <div className="flex items-center rounded-full bg-card">
-        <LoginButton className="shadow-sm ring-1 ring-background dark:ring-background/30" />
+        <LoginButton className="shadow-sm ring-1 ring-background dark:shadow-none dark:ring-0" />
       </div>
     </header>
   )

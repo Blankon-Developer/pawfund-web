@@ -24,23 +24,45 @@ const getAuthMe = async (
   return res.data
 }
 
-const getAuthMeQueryOptions = (params: AuthMeParams) =>
+const getAuthMeQueryOptions = (params?: AuthMeParams) =>
   queryOptions({
-    queryKey: ["auth", "me", params.token],
-    queryFn: () => getAuthMe(params),
+    queryKey: params?.token
+      ? ["auth", "auth-me", params.token]
+      : ["auth", "auth-me"],
+    queryFn: async () => {
+      if (!params?.token) {
+        throw new Error("No token provided")
+      }
+
+      try {
+        return await getAuthMe(params)
+      } catch (error) {
+        throw error
+      }
+    },
+    retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 30 * (60 * 1000), // 30 Minutes
   })
 
 type UseGetAuthMeOptions = {
   queryConfig?: QueryConfig<typeof getAuthMeQueryOptions>
 }
 
-const useGetAuthMe = ({ queryConfig }: UseGetAuthMeOptions) => {
+const useGetAuthMe = ({ queryConfig }: UseGetAuthMeOptions = {}) => {
   const token = useJWTStore((state) => state.token)
 
-  return useQuery({
+  const query = useQuery({
     ...getAuthMeQueryOptions({ token: token ?? undefined }),
     ...queryConfig,
   })
+
+  const isAuthenticated = !!query.data?.role
+
+  return {
+    ...query,
+    isAuthenticated,
+  }
 }
 
 export { getAuthMe, useGetAuthMe, getAuthMeQueryOptions }

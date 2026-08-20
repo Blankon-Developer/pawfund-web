@@ -10,7 +10,7 @@ import { ArrowTopRightShape } from "@/assets/shape/arrow-top-right"
 import { PawCircular } from "@/assets/icons/paw-circular"
 import { ToggleTheme } from "./toggle-theme"
 
-const hideFooterPaths: Route[] = ["/register"]
+const hideFooterPaths: Route[] = ["/register", "/account"]
 
 export function Footer() {
   const pathname = usePathname()
