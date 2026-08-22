@@ -22,7 +22,7 @@ export function Footer() {
   return (
     <>
       <div
-        className={cn("h-7 w-full bg-transparent")}
+        className={cn("h-7 w-full bg-transparent dark:brightness-90")}
         style={{
           mask: `url(${HalfCircle.src})`,
           background: "var(--primary)",
@@ -31,7 +31,7 @@ export function Footer() {
           maskPosition: "center bottom",
         }}
       />
-      <footer className={"-mt-px w-full bg-primary py-8"}>
+      <footer className={"-mt-px w-full bg-primary py-8 dark:brightness-90"}>
         <div className="bg relative mx-auto flex w-[calc(100%-2rem)] max-w-360 flex-col justify-between gap-8 sm:w-[calc(100%-3rem)] sm:flex-row sm:items-center">
           <div>
             <Image
@@ -39,7 +39,7 @@ export function Footer() {
               alt="Pawfund Logo"
               width={160}
               height={40}
-              className="h-auto w-40 dark:invert-89"
+              className="h-auto w-40"
             />
             <p className="mt-4 flex items-center gap-0.5 text-primary-foreground">
               Made With
@@ -99,13 +99,13 @@ export function Footer() {
                 Privacy Policy
               </Link>
               <ToggleTheme
-                className="text-background! hover:bg-muted/10! sm:-mr-2"
+                className="text-primary-foreground hover:bg-muted/10! hover:text-primary-foreground sm:-mr-2"
                 variant="ghost"
                 size="icon-sm"
               />
             </div>
             <PawCircular
-              className="absolute -top-1 right-0 size-12 transform [--paw-circ-bg:var(--primary-foreground)] [--paw-circ-fg:var(--color-rose-500)] sm:top-2 sm:left-1/2 sm:size-14 sm:-translate-x-1/2 dark:[--paw-circ-bg:var(--color-neutral-900)] dark:[--paw-circ-fg:var(--primary)]"
+              className="absolute -top-1 right-0 size-12 transform [--paw-circ-bg:var(--primary-foreground)] [--paw-circ-fg:var(--color-rose-500)] sm:top-2 sm:left-1/2 sm:size-14 sm:-translate-x-1/2 dark:brightness-90"
               bgColor="var(--paw-circ-bg)"
               fgColor="var(--paw-circ-fg)"
             />

@@ -10,7 +10,10 @@ import * as formatDate from "@/utils/format-date"
 
 import { CampaignItemData } from "../types/campaign.types"
 
-type CampaignCardProps = Omit<CampaignItemData, "status" | "createdAt" | "id"> & {
+type CampaignCardProps = Omit<
+  CampaignItemData,
+  "status" | "createdAt" | "id"
+> & {
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
@@ -78,7 +81,7 @@ function ImageSection({
         alt="Card Image"
         width={512}
         height={512}
-        className="h-full w-full bg-gray-200 object-cover transition-all group-hover:scale-110"
+        className="h-full w-full bg-card object-cover transition-all group-hover:scale-110"
       />
       {/* Image background clipping */}
       <>
@@ -108,7 +111,7 @@ function ImageSection({
         width={44}
         height={44}
         alt="Fundraiser"
-        className="absolute bottom-1.5 left-1.5 size-8 rounded-full bg-gray-200 object-cover sm:bottom-0 sm:left-0 sm:size-11"
+        className="absolute bottom-1.5 left-1.5 size-8 rounded-full bg-secondary object-cover sm:bottom-0 sm:left-0 sm:size-11"
       />
 
       {/* Time Remaining Badge */}

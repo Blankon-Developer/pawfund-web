@@ -1,15 +1,15 @@
 import { PawCircular } from "@/assets/icons/paw-circular"
-import { CampaignCard } from "../campaign-card"
 import { Button } from "@/shadcn-ui/button"
 import Link from "next/link"
-import { getCampaigns } from "../../api/campaigns"
 import { cn } from "@/utils"
 import { ErrorBoundary } from "react-error-boundary"
+import { getCampaigns } from "@/features/public/api/campaigns"
+import { CampaignCard } from "../../campaign-card"
 
 async function OverviewSection() {
   return (
     <section className="my-24 flex flex-col items-center">
-      <div className="flex items-center justify-center gap-6">
+      <div className="flex items-center justify-center gap-6 dark:brightness-80">
         <PawCircular className="size-10" bgColor="#E5E7EB" fgColor="#9CA3AF" />
         <PawCircular bgColor="#E5E7EB" className="size-14" fgColor="#9CA3AF" />
         <PawCircular className="size-16" />
@@ -51,18 +51,19 @@ async function CampaignList({ className }: { className?: string }) {
       )}
     >
       {campaigns?.slice(0, 8).map((campaign) => (
-        <CampaignCard
-          key={campaign.id}
-          title={campaign.title}
-          shortDescription={campaign.shortDescription}
-          goalAmount={campaign.goalAmount}
-          raisedAmount={campaign.raisedAmount}
-          donorCount={campaign.donorCount}
-          campaignImageUrl={campaign.campaignImageUrl}
-          fundraiserImageUrl={campaign.fundraiserImageUrl}
-          endAt={campaign.endAt}
-          contractAddress={campaign.contractAddress}
-        />
+        <Link key={campaign.id} href={`/campaign/${campaign.contractAddress}`}>
+          <CampaignCard
+            title={campaign.title}
+            shortDescription={campaign.shortDescription}
+            goalAmount={campaign.goalAmount}
+            raisedAmount={campaign.raisedAmount}
+            donorCount={campaign.donorCount}
+            campaignImageUrl={campaign.campaignImageUrl}
+            fundraiserImageUrl={campaign.fundraiserImageUrl}
+            endAt={campaign.endAt}
+            contractAddress={campaign.contractAddress}
+          />
+        </Link>
       ))}
     </div>
   )

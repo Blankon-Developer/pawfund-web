@@ -5,6 +5,8 @@ import Link from "next/link"
 import { LoginButton } from "./login-button"
 import { usePathname } from "next/navigation"
 import { Route } from "next"
+import { cn } from "@/utils"
+import { ToggleTheme } from "./toggle-theme"
 
 const hideHeaderPaths: Route[] = ["/register", "/account"]
 
@@ -16,7 +18,13 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-4 z-50 mx-auto mt-10 flex h-10 w-[calc(100%-1.5rem)] max-w-360 min-w-62.5 items-center justify-between rounded-full bg-transparent px-3 sm:w-[calc(100%-2.5rem)] sm:px-5">
+    <header
+      className={cn(
+        "sticky top-4 z-50 mx-auto mt-10 flex h-10 w-[calc(100%-1.5rem)] max-w-360 min-w-62.5 items-center justify-between rounded-full bg-transparent px-3 sm:w-[calc(100%-2.5rem)] sm:px-5",
+        "transition-padding transition-margin duration-300",
+        pathname !== "/" && "mt-4 px-0 sm:px-0"
+      )}
+    >
       <Link
         href={"/"}
         className="relative flex h-10 items-center rounded-full bg-gray-200 px-3 shadow-md ring-2 ring-background dark:bg-secondary dark:shadow-none dark:ring-0"
@@ -32,8 +40,8 @@ export function Header() {
           className="h-auto w-23 sm:w-28"
         />
       </Link>
-      {/* <ToggleTheme variant={"ghost"} /> */}
       <div className="flex items-center rounded-full bg-card">
+        <ToggleTheme variant={"ghost"} />
         <LoginButton className="shadow-sm ring-1 ring-background dark:shadow-none dark:ring-0" />
       </div>
     </header>

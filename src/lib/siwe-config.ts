@@ -68,7 +68,6 @@ const siweConfig = createSIWEConfig({
     }
   },
   verifyMessage: async ({ message, signature }: SIWEVerifyMessageArgs) => {
-    console.log("VERIFY MESSAGE")
     try {
       const { accessToken, ...user } = await verifySignature({
         signature: signature,

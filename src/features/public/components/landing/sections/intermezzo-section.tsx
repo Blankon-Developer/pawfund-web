@@ -7,11 +7,11 @@ import { PawCircular } from "@/assets/icons/paw-circular"
 import { PawRawShape } from "@/assets/shape/paw-raw"
 import { Button } from "@/shadcn-ui/button"
 
-import AnimalMeal from "../../assets/landing/animal-meal.svg"
-import AnimalRescue from "../../assets/landing/animal-rescue.svg"
-import AnimalTreatment from "../../assets/landing/animal-treatment.png"
-import LendHand from "../../assets/landing/lend-hand.svg"
-import SmileyCat from "../../assets/landing/smiley-cat.svg"
+import AnimalMeal from "../assets/animal-meal.svg"
+import AnimalRescue from "../assets/animal-rescue.svg"
+import AnimalTreatment from "../assets/animal-treatment.png"
+import LendHand from "../assets/lend-hand.svg"
+import SmileyCat from "../assets/smiley-cat.svg"
 
 function IntermezzoSection() {
   return (

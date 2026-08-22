@@ -3,6 +3,7 @@ import {
   differenceInHours,
   differenceInMinutes,
   differenceInSeconds,
+  format,
   isValid,
 } from "date-fns"
 
@@ -40,4 +41,25 @@ function timeRemaining(date: Date | string): string {
   return `${value} ${unit}${value !== 1 ? "s" : ""} left`
 }
 
-export { timeRemaining }
+/**
+ * Formats a date into a human-readable string.
+ * @param date The date to format, either as a Date object or an ISO 8601 string.
+ * @param options.includeTime Whether to include the time in the output. Defaults to false.
+ * @returns A formatted date string.
+ * @example
+ * formatDate("2026-08-21T08:19:53.854Z")                   // "21 August 2026"
+ * formatDate("2026-08-21T08:19:53.854Z", { includeTime: true }) // "21 August 2026, 15:19"
+ */
+function formatDate(
+  date: Date | string,
+  options: { includeTime?: boolean } = {}
+): string {
+  const target = new Date(date)
+  if (!isValid(target)) {
+    return "Invalid date"
+  }
+  const pattern = options.includeTime ? "d MMMM yyyy, HH:mm" : "d MMMM yyyy"
+  return format(target, pattern)
+}
+
+export { timeRemaining, formatDate }

@@ -31,10 +31,15 @@ export function LoginButton({ className }: { className?: string }) {
             {isBalanceLoading ? (
               <Skeleton className="hidden h-3 w-16 bg-gray-100 sm:block dark:bg-neutral-900/90" />
             ) : (
-              <div className="ml-0.5 hidden items-center gap-0.5 sm:flex">
-                <USDCIcon className="size-5.5 text-gray-700 dark:text-neutral-300" />
+              <div className="ml-0.5 hidden items-center gap-1 sm:flex">
+                <USDCIcon
+                  variant="fill-cliped"
+                  className="mr-0.5 size-4 text-gray-700 dark:text-neutral-300"
+                />
                 <span className="">{balanceData?.formatedBalance}</span>
-                <span className="text-muted-foreground">{balanceData?.symbol}</span>
+                <span className="text-muted-foreground">
+                  {balanceData?.symbol}
+                </span>
               </div>
             )}
 

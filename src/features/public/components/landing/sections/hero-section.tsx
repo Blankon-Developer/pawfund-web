@@ -10,8 +10,8 @@ import { PortalShape } from "@/assets/shape/portal"
 import { Button } from "@/shadcn-ui/button"
 import { cn } from "@/utils"
 
-import PawCircPersp2 from "../../assets/landing/paw-circular-perspective-2.png"
-import PawCircPersp from "../../assets/landing/paw-circular-perspective.png"
+import PawCircPersp2 from "../assets/paw-circular-perspective-2.png"
+import PawCircPersp from "../assets/paw-circular-perspective.png"
 
 function HeroSection({ className }: { className?: string }) {
   return (
