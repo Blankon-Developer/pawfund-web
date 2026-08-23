@@ -8,7 +8,12 @@ import { Route } from "next"
 import { cn } from "@/utils"
 import { ToggleTheme } from "./toggle-theme"
 
-const hideHeaderPaths: Route[] = ["/register", "/account"]
+const hideHeaderPaths: Route[] = [
+  "/register",
+  "/account",
+  "/create-campaign",
+  "/create-campaign/preview",
+]
 
 export function Header() {
   const pathname = usePathname()

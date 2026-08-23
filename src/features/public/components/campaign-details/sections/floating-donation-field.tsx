@@ -4,6 +4,7 @@ import { timeRemaining } from "@/utils/format-date"
 import { Calendar, Goal, HandHeart, Heart, Share } from "lucide-react"
 import numeral from "numeral"
 import { DonationDialogTrigger } from "./input-donation-dialog"
+import { cn } from "@/utils"
 
 type FloatingDonationFieldProps = {
   goalAmount: number
@@ -11,6 +12,8 @@ type FloatingDonationFieldProps = {
   endAt: string
   raisedAmount: number
   contractAddress: string
+  className?: string
+  disabled?: boolean
 }
 
 export function FloatingDonationField({
@@ -18,6 +21,8 @@ export function FloatingDonationField({
   donorCount,
   endAt,
   goalAmount,
+  className,
+  disabled,
 }: FloatingDonationFieldProps) {
   const raised = `${numeral(raisedAmount)
     .format(raisedAmount >= 10_000 ? "0.0a" : "0,0")
@@ -36,7 +41,12 @@ export function FloatingDonationField({
   const progress = raisedAmount / goalAmount
 
   return (
-    <div className="sticky right-0 bottom-3 left-0 flex w-full flex-col justify-between gap-4 rounded-3xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:gap-10 lg:hidden">
+    <div
+      className={cn(
+        "sticky right-0 bottom-3 left-0 flex w-full flex-col justify-between gap-4 rounded-3xl border border-border bg-card p-3 sm:flex-row sm:items-center sm:gap-10",
+        className
+      )}
+    >
       <div className="flex items-center gap-2">
         <ProgressCircle
           value={progress * 100}
@@ -77,11 +87,12 @@ export function FloatingDonationField({
           variant={"secondary"}
           size={"lg"}
           className="bg-gray-200 dark:bg-secondary"
+          disabled={disabled}
         >
           <Share />
           Share
         </Button>
-        <DonationDialogTrigger size={"lg"} className="grow">
+        <DonationDialogTrigger disabled={disabled} size={"lg"} className="grow">
           <HandHeart />
           Donate
         </DonationDialogTrigger>

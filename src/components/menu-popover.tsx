@@ -101,7 +101,7 @@ function FundraiserMenuContent({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="flex flex-col gap-1">
-      <Button variant={"outline"}>
+      <Button variant={"outline"} onClick={() => navigate("/create-campaign")}>
         <PlusIcon />
         Create Campaign
       </Button>

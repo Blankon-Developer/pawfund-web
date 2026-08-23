@@ -25,6 +25,7 @@ type DonationFieldProps = {
   endAt: string
   raisedAmount: number
   contractAddress: string
+  disabled?: boolean
 }
 
 const formSchema = z.object({
@@ -41,8 +42,10 @@ export function DonationField({
   endAt,
   goalAmount,
   raisedAmount,
+  disabled,
 }: DonationFieldProps) {
   const form = useHookForm({
+    disabled,
     schema: formSchema,
     defaultValues: {
       amount: "",
@@ -146,6 +149,7 @@ export function DonationField({
                 </Field>
                 <div className="mt-2 grid grid-cols-4 gap-2">
                   <ButtonSelectAmount
+                    disabled={disabled}
                     amount="25"
                     selected={field.value == "25"}
                     onSelected={(amount) =>
@@ -156,6 +160,7 @@ export function DonationField({
                     }
                   />
                   <ButtonSelectAmount
+                    disabled={disabled}
                     amount="50"
                     selected={field.value == "50"}
                     onSelected={(amount) =>
@@ -166,6 +171,7 @@ export function DonationField({
                     }
                   />
                   <ButtonSelectAmount
+                    disabled={disabled}
                     amount="100"
                     selected={field.value == "100"}
                     onSelected={(amount) =>
@@ -176,6 +182,7 @@ export function DonationField({
                     }
                   />
                   <ButtonSelectAmount
+                    disabled={disabled}
                     amount="200"
                     selected={field.value == "200"}
                     onSelected={(amount) =>
@@ -196,6 +203,7 @@ export function DonationField({
         className="mt-4 h-12 w-full"
         type="submit"
         form="donate-form"
+        disabled={disabled}
       >
         <HandHeart />
         Donate
@@ -204,6 +212,7 @@ export function DonationField({
         variant={"secondary"}
         size={"lg"}
         className="mt-2 h-12 w-full bg-gray-300/60 dark:bg-secondary"
+        disabled={disabled}
       >
         <Share />
         Share
@@ -217,6 +226,7 @@ export function ButtonSelectAmount(
     amount: string
     selected?: boolean
     onSelected?: (amount: string) => void
+    disabled?: boolean
   } & React.HTMLAttributes<HTMLButtonElement>
 ) {
   const { amount, selected, onSelected, ...restProps } = props

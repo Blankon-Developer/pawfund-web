@@ -1,9 +1,11 @@
 import {
+  addHours,
   differenceInDays,
   differenceInHours,
   differenceInMinutes,
   differenceInSeconds,
   format,
+  isBefore,
   isValid,
 } from "date-fns"
 
@@ -62,4 +64,18 @@ function formatDate(
   return format(target, pattern)
 }
 
-export { timeRemaining, formatDate }
+/**
+ * Validate if the date is at least 24 hours from now
+ * @param date The target date, either as a Date object or an ISO 8601 string.
+ * @returns True if the date is at least 24 hours from now, false otherwise.
+ * @example
+ * isAtLeast24HoursFromNow("2026-08-21T08:19:53.854Z") // true
+ */
+function isAtLeast24HoursFromNow(date: Date | string): boolean {
+  const target = new Date(date)
+  const minimum = addHours(new Date(), 24)
+
+  return !isBefore(target, minimum)
+}
+
+export { timeRemaining, formatDate, isAtLeast24HoursFromNow }

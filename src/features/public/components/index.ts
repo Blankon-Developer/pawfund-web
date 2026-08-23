@@ -1,3 +1,6 @@
 export { LandingPage } from "./landing/page"
-export { CampaignDetailsPage } from "./campaign-details/page"
+export {
+  CampaignDetailsPage,
+  CampaignPreviewPage,
+} from "./campaign-details/pages"
 export { CampaignCard } from "./campaign-card"

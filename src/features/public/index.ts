@@ -3,7 +3,7 @@ export { getCampaigns } from "./api/campaigns"
 export { getCampaignByAddress } from "./api/campaign-by-address"
 
 // Components
-export { CampaignCard, CampaignDetailsPage, LandingPage } from "./components"
+export * from "./components"
 
 // Types
 export type {

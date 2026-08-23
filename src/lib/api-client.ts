@@ -104,8 +104,8 @@ async function fetchApi<T>(
       if (error instanceof ApiError) {
         if (defaultApiErrorToast) error.showToast()
       } else if (error instanceof Error) {
-        toast.error("Something went wrong", {
-          description: `${error.name}: ${error.message}`,
+        toast.error("An error occurred", {
+          description: error.message,
         })
       } else {
         toast.error("Something went wrong", {
