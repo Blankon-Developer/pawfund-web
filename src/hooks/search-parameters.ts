@@ -22,10 +22,10 @@ export function useSearchParameters<
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  const value = useMemo(() => {
+  const value: z.core.output<TSchema> = useMemo(() => {
     const raw = Object.fromEntries(searchParams.entries())
 
-    return schema ? schema.parse(raw) : raw
+    return schema ? schema.parse(raw) : (raw as z.core.output<TSchema>)
   }, [schema, searchParams])
 
   const set = useCallback(

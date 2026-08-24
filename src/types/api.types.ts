@@ -4,7 +4,7 @@ type ApiBase = {
   message: string
 }
 
-type Pagination = {
+export type Pagination = {
   current: number
   pageSize: number
   totalPages: number

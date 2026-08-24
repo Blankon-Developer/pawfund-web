@@ -1,5 +1,5 @@
 // Api's
-export { getCampaigns } from "./api/campaigns"
+export { getCampaigns, useGetCampaigns } from "./api/campaigns"
 export { getCampaignByAddress } from "./api/campaign-by-address"
 
 // Components

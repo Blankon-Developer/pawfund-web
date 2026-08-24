@@ -1,4 +1,4 @@
-export type CampaignStatus = "ACTIVE" | "COMPLETED" | "CANCELLED"
+export type CampaignStatus = "active" | "completed" | "canceled"
 
 export type CampaignItemData = {
   id: string

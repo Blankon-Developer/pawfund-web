@@ -14,7 +14,7 @@ export function MainContainer({
   return (
     <Comp
       className={cn(
-        "mx-auto min-h-[calc(100vh-14.8rem)] w-[calc(100%-1.5rem)] max-w-360 sm:w-[calc(100%-2.5rem)]",
+        "mx-auto min-h-[calc(100vh-13.5rem)] w-[calc(100%-1.5rem)] max-w-360 sm:w-[calc(100%-2.5rem)]",
         className
       )}
       {...props}
