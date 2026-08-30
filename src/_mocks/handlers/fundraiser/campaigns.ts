@@ -1,11 +1,10 @@
 // List campaigns owned by the authenticated fundraiser. Search matches titles and short descriptions case-insensitively.
 
-// eslint-disable-next-line local/no-cross-feature-deep-imports
 import {
+  CampaignStatus,
   FundariserCampaignItemData,
   FundraiserCampaignStatus,
-} from "@/features/fundraiser/types/fundraiser-campaign.types"
-import type { CampaignStatus } from "@/features/public"
+} from "@/features/campaign"
 import { ApiSuccessType } from "@/types/api.types"
 import { buildApiUrl } from "@/utils/build-url"
 import { http, HttpResponse } from "msw"

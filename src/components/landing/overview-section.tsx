@@ -3,7 +3,7 @@ import { Button } from "@/shadcn-ui/button"
 import Link from "next/link"
 import { cn } from "@/utils"
 import { ErrorBoundary } from "react-error-boundary"
-import { CampaignCard, getCampaigns } from "@/features/campaigns"
+import { CampaignCard, getCampaigns } from "@/features/campaign"
 
 async function OverviewSection() {
   return (

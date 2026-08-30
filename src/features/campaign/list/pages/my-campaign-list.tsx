@@ -19,8 +19,8 @@ import { ArrowLeftIcon, FolderIcon, PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
-import { useGetMyCampaigns } from "@/features/campaigns/api"
-import { FundraiserCampaignCard } from "@/features/campaigns/components"
+import { useGetMyCampaigns } from "@/features/campaign/api"
+import { FundraiserCampaignCard } from "@/features/campaign/components"
 
 import { CampaignsSort } from "../components/campaigns-sort"
 import { searchParamsSchema } from "../schema"

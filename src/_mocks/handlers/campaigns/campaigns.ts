@@ -1,4 +1,4 @@
-import type { CampaignItemData, CampaignStatus } from "@/features/public"
+import { CampaignItemData, CampaignStatus } from "@/features/campaign"
 import { ApiSuccessType } from "@/types/api.types"
 import { buildApiUrl } from "@/utils/build-url"
 import { http, HttpResponse } from "msw"

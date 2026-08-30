@@ -16,8 +16,8 @@ import { SearchIcon, XIcon } from "lucide-react"
 import Link from "next/link"
 import { useRef, useState } from "react"
 
-import { useGetCampaigns } from "@/features/campaigns/api"
-import { CampaignCard } from "@/features/campaigns/components"
+import { useGetCampaigns } from "@/features/campaign/api"
+import { CampaignCard } from "@/features/campaign/components"
 
 import { CampaignsSort } from "../components/campaigns-sort"
 import { searchParamsSchema } from "../schema"

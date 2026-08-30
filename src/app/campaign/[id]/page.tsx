@@ -1,4 +1,4 @@
-import { CampaignDetailPage } from "@/features/campaigns"
+import { CampaignDetailPage } from "@/features/campaign"
 
 export default function Page() {
   return <CampaignDetailPage />

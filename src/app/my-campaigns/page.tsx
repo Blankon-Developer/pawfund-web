@@ -1,4 +1,4 @@
-import { MyCampaignListPage } from "@/features/campaigns"
+import { MyCampaignListPage } from "@/features/campaign"
 
 export default function Page() {
   return <MyCampaignListPage />

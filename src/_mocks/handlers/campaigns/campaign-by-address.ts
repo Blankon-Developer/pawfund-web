@@ -1,4 +1,4 @@
-import type { CampaignDetailData } from "@/features/public"
+import { CampaignDetailData } from "@/features/campaign"
 import { ApiSuccessType } from "@/types/api.types"
 import { buildApiUrl } from "@/utils/build-url"
 import { http, HttpResponse } from "msw"
@@ -30,7 +30,7 @@ export const getCampaignByAddress = http.get<{ address: string }>(
             Date.now() - 7 * 24 * 60 * 60 * 1000
           ).toISOString(),
           contractAddress: address,
-          status: "ACTIVE",
+          status: "active",
           country: "Indonesia",
           zipCode: "12345",
           story: `This is the story for campaign ${address}. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
