@@ -1,7 +1,9 @@
 "use client"
 
+import countries from "@/assets/countries.json"
 import { AvatarInput } from "@/components/avatar-input"
-import { AccountField, useAccountFormStore } from "@/features/account"
+import { Text } from "@/components/typography"
+import { useAccountFormStore } from "@/features/account/stores/form.store"
 import { FileWithPreview } from "@/hooks/file-upload"
 import { useHookForm } from "@/lib/hook-form"
 import { Button } from "@/shadcn-ui/button"
@@ -25,10 +27,10 @@ import { TrashIcon } from "lucide-react"
 import { useCallback, useEffect } from "react"
 import { Controller } from "react-hook-form"
 import { toast } from "sonner"
-import z from "zod"
-import countries from "@/assets/countries.json"
-import { Text } from "@/components/typography"
 import { useAccount } from "wagmi"
+import z from "zod"
+
+import { AccountField } from "../account-field"
 
 function FieldLabel(props: React.ComponentProps<typeof FieldLabelPrimitive>) {
   return (

@@ -2,7 +2,7 @@
 
 import { AvatarInput } from "@/components/avatar-input"
 import { Text } from "@/components/typography"
-import { AccountField, useAccountFormStore } from "@/features/account"
+import { useAccountFormStore } from "@/features/account/stores/form.store"
 import { FileWithPreview } from "@/hooks/file-upload"
 import { useHookForm } from "@/lib/hook-form"
 import { Button } from "@/shadcn-ui/button"
@@ -15,6 +15,8 @@ import { Controller } from "react-hook-form"
 import { toast } from "sonner"
 import { useAccount } from "wagmi"
 import z from "zod"
+
+import { AccountField } from "../account-field"
 
 const supporterAccountSchema = z.object({
   name: z.string().min(1, "Fundraiser name is required."),
