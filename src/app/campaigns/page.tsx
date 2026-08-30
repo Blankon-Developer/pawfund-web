@@ -1,5 +1,5 @@
-import { CampaignsPage } from "@/features/public"
+import { CampaignListPage } from "@/features/campaigns"
 
 export default function Page() {
-  return <CampaignsPage />
+  return <CampaignListPage />
 }

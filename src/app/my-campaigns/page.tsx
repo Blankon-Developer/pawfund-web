@@ -1,5 +1,5 @@
-import { MyCampaignsPage } from "@/features/fundraiser"
+import { MyCampaignListPage } from "@/features/campaigns"
 
 export default function Page() {
-  return <MyCampaignsPage />
+  return <MyCampaignListPage />
 }
