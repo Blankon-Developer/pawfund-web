@@ -14,7 +14,7 @@ const hideFooterPaths: Route[] = [
   "/register",
   "/account",
   "/create-campaign",
-  "/create-campaign/preview",
+  "/my-campaigns",
 ]
 
 export function Footer() {

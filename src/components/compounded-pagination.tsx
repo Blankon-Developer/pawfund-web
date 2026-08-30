@@ -83,12 +83,14 @@ function CompoundedPagination({
   },
   isLoading,
   className,
+  disabled,
   onPageChange,
 }: {
   pagination?: PaginationType
   isLoading?: boolean
   onPageChange?: (page: number, pageSize: number) => void
   className?: string
+  disabled?: boolean
 }) {
   const { current, pageSize, totalPages } = pagination
 
@@ -110,7 +112,7 @@ function CompoundedPagination({
         <PaginationItem className="flex flex-wrap items-center gap-1">
           <PaginationPreviousButton
             onClick={() => onPageChange?.(current - 1, pageSize)}
-            disabled={current == 1}
+            disabled={current == 1 || disabled}
           />
           {pageItems.map((item, idx) => {
             if (item === "ellipsis") {
@@ -118,6 +120,7 @@ function CompoundedPagination({
             }
             return (
               <PaginationButton
+                disabled={disabled}
                 isActive={current == item}
                 key={idx}
                 onClick={() =>
@@ -130,7 +133,7 @@ function CompoundedPagination({
           })}
           <PaginationNextButton
             onClick={() => onPageChange?.(current + 1, pageSize)}
-            disabled={current == totalPages}
+            disabled={current == totalPages || disabled}
           />
         </PaginationItem>
 
@@ -140,6 +143,7 @@ function CompoundedPagination({
             of <span className="font-medium text-foreground">{totalPages}</span>
           </span>
           <NativeSelect
+            disabled={disabled}
             size="sm"
             className="w-28"
             onChange={(val) => onPageChange?.(1, Number(val.target.value))}

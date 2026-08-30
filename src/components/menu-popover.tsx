@@ -114,7 +114,11 @@ function FundraiserMenuContent({ onNavigate }: { onNavigate?: () => void }) {
         Account
       </Button>
       <MyWalletButton />
-      <Button variant="ghost" className="w-full justify-start">
+      <Button
+        onClick={() => navigate("/my-campaigns")}
+        variant="ghost"
+        className="w-full justify-start"
+      >
         <MegaphoneIcon />
         My Campaigns
       </Button>

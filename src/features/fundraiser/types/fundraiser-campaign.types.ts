@@ -19,8 +19,23 @@ type FundraiserCampaignDetailData = {
   deploymentStatus: FundraiserCampaignDeployStatus
 }
 
+type FundariserCampaignItemData = {
+  id: string
+  title: string
+  shortDescription: string
+  goalAmount: number
+  raisedAmount: number
+  donorCount: number
+  imageUrl: string
+  endAt: string
+  createdAt: string
+  contractAddress: string
+  status: FundraiserCampaignStatus
+}
+
 export type {
   FundraiserCampaignStatus,
   FundraiserCampaignDeployStatus,
   FundraiserCampaignDetailData,
+  FundariserCampaignItemData,
 }

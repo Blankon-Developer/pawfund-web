@@ -40,7 +40,7 @@ async function OverviewSection() {
 }
 
 async function CampaignList({ className }: { className?: string }) {
-  const campaigns = await getCampaigns().catch(() => {
+  const data = await getCampaigns().catch(() => {
     throw new Error("Failed to fetch campaigns")
   })
   return (
@@ -50,7 +50,7 @@ async function CampaignList({ className }: { className?: string }) {
         className
       )}
     >
-      {campaigns?.slice(0, 8).map((campaign) => (
+      {data.campaigns?.slice(0, 8).map((campaign) => (
         <Link key={campaign.id} href={`/campaign/${campaign.contractAddress}`}>
           <CampaignCard
             title={campaign.title}
