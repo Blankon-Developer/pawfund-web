@@ -13,6 +13,7 @@ const hideHeaderPaths: Route[] = [
   "/account",
   "/create-campaign",
   "/my-campaigns",
+  "/my-donations",
 ]
 
 export function Header() {

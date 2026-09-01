@@ -145,7 +145,11 @@ function SupporterMenuContent({ onNavigate }: { onNavigate?: () => void }) {
         Account
       </Button>
       <MyWalletButton />
-      <Button variant="ghost" className="w-full justify-start">
+      <Button
+        onClick={() => navigate("/my-donations")}
+        variant="ghost"
+        className="w-full justify-start"
+      >
         <HandHeartIcon />
         My Donations
       </Button>

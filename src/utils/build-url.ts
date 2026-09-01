@@ -1,9 +1,6 @@
 import { env } from "@/lib/env"
 
-type QueryParams = Record<
-  string,
-  string | number | boolean | null | undefined
->
+type QueryParams = Record<string, string | number | boolean | null | undefined>
 
 function createSearchParams(params?: QueryParams): URLSearchParams {
   const searchParams = new URLSearchParams()
@@ -21,10 +18,7 @@ function createSearchParams(params?: QueryParams): URLSearchParams {
   return searchParams
 }
 
-export function buildUrlWithParams(
-  url: string,
-  params?: QueryParams
-): string {
+export function buildUrlWithParams(url: string, params?: QueryParams): string {
   const searchParams = createSearchParams(params)
 
   if (!searchParams.size) {
@@ -34,10 +28,7 @@ export function buildUrlWithParams(
   return `${url}?${searchParams.toString()}`
 }
 
-export function buildApiUrl(
-  path: string,
-  params?: QueryParams
-): string {
+export function buildApiUrl(path: string, params?: QueryParams): string {
   const baseUrl = env.NEXT_PUBLIC_BASE_API_URL
 
   if (!baseUrl) {
@@ -45,6 +36,7 @@ export function buildApiUrl(
   }
 
   const url = new URL(path, baseUrl)
+  url.pathname = `v1${url.pathname}`
 
   const searchParams = createSearchParams(params)
 

@@ -78,4 +78,38 @@ function isAtLeast24HoursFromNow(date: Date | string): boolean {
   return !isBefore(target, minimum)
 }
 
-export { timeRemaining, formatDate, isAtLeast24HoursFromNow }
+/**
+ * Formats a date into a relative date string (e.g., "2 minutes ago", "2 hours ago", "2 days ago", "28 November 2026, 15:23").
+ * @param date The date to format, either as a Date object or an ISO 8601 string.
+ * @returns A formatted relative date string.
+ * @example
+ * formatRelativeDate("2026-08-21T08:19:53.854Z") // "21 August 2026, 15:19"
+ */
+function formatRelativeDate(date: Date | string): string {
+  const target = typeof date === "string" ? new Date(date) : date
+
+  if (!isValid(target)) {
+    return "-"
+  }
+
+  const minutes = differenceInMinutes(new Date(), target)
+
+  if (minutes < 60) {
+    return `${minutes} ${minutes === 1 ? "Minute" : "Minutes"} ago`
+  }
+
+  const hours = differenceInHours(new Date(), target)
+
+  if (hours < 24) {
+    return `${hours} ${hours === 1 ? "Hour" : "Hours"} ago`
+  }
+
+  return format(target, "d MMMM yyyy, HH:mm")
+}
+
+export {
+  timeRemaining,
+  formatDate,
+  isAtLeast24HoursFromNow,
+  formatRelativeDate,
+}

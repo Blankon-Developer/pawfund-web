@@ -8,7 +8,7 @@ type TextProps = {
   React.ComponentProps<"p">
 
 const textVariants = cva(
-  "group/p text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-2 [&_a]:hover:font-medium",
+  "group/p text-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-2 [&_a]:transition-[font-weight] [&_a]:duration-200 [&_a]:hover:font-medium",
   {
     variants: {
       variant: {
