@@ -1,4 +1,4 @@
-export type Role = "FUNDRAISER" | "SUPPORTER"
+export type Role = "fundraiser" | "supporter"
 
 export type AuthMeData = {
   name: string | null

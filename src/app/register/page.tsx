@@ -48,13 +48,13 @@ export default function RegisterPage() {
           value="2"
           className={cn("flex flex-col", step !== 2 && "hidden")}
         >
-          {selectedRole === "FUNDRAISER" && (
+          {selectedRole?.toLowerCase() === "fundraiser" && (
             <FundraiserRegisterForm
               className="flex-1"
               onPrevious={() => setStep(1)}
             />
           )}
-          {selectedRole === "SUPPORTER" && (
+          {selectedRole?.toLowerCase() === "supporter" && (
             <SupporterRegisterForm
               className="flex-1"
               onPrevious={() => setStep(1)}
@@ -66,13 +66,13 @@ export default function RegisterPage() {
           value="3"
           className={cn("flex flex-col", step !== 3 && "hidden")}
         >
-          {selectedRole === "FUNDRAISER" && (
+          {selectedRole?.toLowerCase() === "fundraiser" && (
             <FundraiserRegisterPreview
               className="flex-1"
               onPrevious={() => setStep(2)}
             />
           )}
-          {selectedRole === "SUPPORTER" && (
+          {selectedRole?.toLowerCase() === "supporter" && (
             <SupporterRegisterPreview
               className="flex-1"
               onPrevious={() => setStep(2)}

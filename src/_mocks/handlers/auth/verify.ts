@@ -15,7 +15,7 @@ const accounts: AuthMeData[] = [
   {
     address: "0xF7E86ad7c0E09F3498381d2AaE5F66D3DB2b6Ea4",
     name: "Account 1",
-    role: "FUNDRAISER",
+    role: "fundraiser",
     imageUrl:
       "https://picsum.photos/seed/0xF7E86ad7c0E09F3498381d2AaE5F66D3DB2b6Ea4/200",
     isNotRegistered: false,
@@ -24,7 +24,7 @@ const accounts: AuthMeData[] = [
   {
     address: "0xCbbE0715ea8A2FE659e46B51b0C0df0291D06D81",
     name: "Account 2",
-    role: "SUPPORTER",
+    role: "supporter",
     imageUrl:
       "https://picsum.photos/seed/0xCbbE0715ea8A2FE659e46B51b0C0df0291D06D81/200",
     isNotRegistered: false,

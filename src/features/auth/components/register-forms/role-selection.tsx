@@ -3,10 +3,7 @@
 import { H3, Text } from "@/components/typography"
 import { useHookForm } from "@/lib/hook-form"
 import { Button } from "@/shadcn-ui/button"
-import {
-  Field,
-  FieldError
-} from "@/shadcn-ui/field"
+import { Field, FieldError } from "@/shadcn-ui/field"
 import { cn } from "@/utils"
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -22,7 +19,7 @@ type RoleSelectionFormProps = {
   onSubmit?: (values: RoleSelectionValues) => void
 }
 const roleSelectionSchema = z.object({
-  role: z.enum(["SUPPORTER", "FUNDRAISER"] as [Role, ...Role[]], {
+  role: z.enum(["fundraiser", "supporter"] as [Role, ...Role[]], {
     error: "Please select a role to continue.",
   }),
 })
@@ -95,4 +92,3 @@ function RoleSelectionForm({ className, onSubmit }: RoleSelectionFormProps) {
 
 export { RoleSelectionForm }
 export type { RoleSelectionValues }
-

@@ -49,10 +49,10 @@ export function MenuPopover({
           }
         }}
       >
-        {session?.user?.role === "FUNDRAISER" && (
+        {session?.user?.role?.toLowerCase() === "fundraiser" && (
           <FundraiserMenuContent onNavigate={() => setOpen(false)} />
         )}
-        {session?.user?.role === "SUPPORTER" && (
+        {session?.user?.role?.toLowerCase() === "supporter" && (
           <SupporterMenuContent onNavigate={() => setOpen(false)} />
         )}
         {session?.user?.isNotRegistered && <UnregisteredMenuContent />}

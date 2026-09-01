@@ -29,16 +29,16 @@ export function AccountPage() {
 
   return (
     <AccountLayout role={authData?.role || undefined} isDirty={isDirty}>
-      {authData?.role === "FUNDRAISER" && (
+      {authData?.role?.toLowerCase() === "fundraiser" && (
         <FundraiserAccountForm
-          id={"FUNDRAISER"}
+          id={"fundraiser"}
           defaultValues={fundraiserDefault}
         />
       )}
 
-      {authData?.role === "SUPPORTER" && (
+      {authData?.role?.toLowerCase() === "supporter" && (
         <SupporterAccountForm
-          id={"SUPPORTER"}
+          id={"supporter"}
           defaultValues={supporterDefault}
         />
       )}

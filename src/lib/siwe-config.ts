@@ -54,13 +54,12 @@ const siweConfig = createSIWEConfig({
 
           return {
             address: res.address,
-            chainId: res.chainId,
+            chainId: res.chainId ?? baseSepolia.id, // `?? baseSepolia.id` ini sebagai fallback sembari menunggu response be sudah sesuai
           } satisfies SIWESession
         })
         .catch((err) => {
           throw err
         })
-
       return authMe
     } catch (error) {
       console.error("Error getting SIWE session:", error)

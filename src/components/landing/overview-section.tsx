@@ -4,6 +4,13 @@ import Link from "next/link"
 import { cn } from "@/utils"
 import { ErrorBoundary } from "react-error-boundary"
 import { CampaignCard, getCampaigns } from "@/features/campaign"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/shadcn-ui/empty"
 
 async function OverviewSection() {
   return (
@@ -42,6 +49,27 @@ async function CampaignList({ className }: { className?: string }) {
   const data = await getCampaigns().catch(() => {
     throw new Error("Failed to fetch campaigns")
   })
+
+  const { campaigns } = data
+
+  if (!campaigns || campaigns.length === 0) {
+    return (
+      <div className="mt-6 flex w-full items-center justify-center">
+        <Empty className="border border-dashed border-border">
+          <EmptyHeader>
+            <EmptyMedia>
+              <StackedCardsIllustration />
+            </EmptyMedia>
+            <EmptyTitle>No campaigns yet</EmptyTitle>
+            <EmptyDescription>
+              Be the first to create a campaign and make a difference!
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </div>
+    )
+  }
+
   return (
     <div
       className={cn(
@@ -49,7 +77,7 @@ async function CampaignList({ className }: { className?: string }) {
         className
       )}
     >
-      {data.campaigns?.slice(0, 8).map((campaign) => (
+      {campaigns?.slice(0, 8).map((campaign) => (
         <Link key={campaign.id} href={`/campaign/${campaign.contractAddress}`}>
           <CampaignCard
             title={campaign.title}
@@ -64,6 +92,27 @@ async function CampaignList({ className }: { className?: string }) {
           />
         </Link>
       ))}
+    </div>
+  )
+}
+
+function StackedCardsIllustration() {
+  return (
+    <div className="relative h-24 w-52" aria-hidden="true">
+      {/* Back card */}
+      <div className="absolute inset-x-6 top-0 h-6 rounded-t-lg border border-border/50 bg-muted/60 dark:bg-muted/30" />
+      {/* Middle card */}
+      <div className="absolute inset-x-3 top-3 h-6 rounded-t-lg border border-border/60 bg-muted/80 dark:bg-muted/50" />
+      {/* Front card */}
+      <div className="absolute inset-x-0 top-6 flex h-16 items-center gap-3 rounded-lg border border-border bg-background px-4 shadow-sm">
+        <div className="size-8 shrink-0 rounded bg-muted" />
+        <div className="flex flex-1 flex-col gap-1.5">
+          <div className="h-2.5 w-3/4 rounded bg-muted" />
+          <div className="h-2 w-1/2 rounded bg-muted/60" />
+        </div>
+      </div>
+      {/* Fade overlay */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-linear-to-b from-background/0 via-background/60 to-background" />
     </div>
   )
 }
