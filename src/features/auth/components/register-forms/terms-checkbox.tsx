@@ -1,10 +1,11 @@
 import { Checkbox } from "@/shadcn-ui/checkbox"
-import { FieldLabel } from "@/shadcn-ui/field"
+import { Field, FieldError, FieldLabel } from "@/shadcn-ui/field"
 import { cn } from "@/utils"
 import { Route } from "next"
 import Link from "next/link"
 import * as z from "zod"
 import { useHookForm } from "@/lib/hook-form"
+import { Controller } from "react-hook-form"
 
 function useTermsCheckForm() {
   return useHookForm({
@@ -20,40 +21,71 @@ function useTermsCheckForm() {
 }
 
 function TermsCheckbox({
-  value,
-  onValueChange,
-  "aria-invalid": ariaInvalid,
   className,
+  disabled,
+  onTermsChecked,
+  formId,
 }: {
-  value?: boolean
-  onValueChange?: (value: boolean | "indeterminate") => void
-  "aria-invalid"?: boolean
   className?: string
+  disabled?: boolean
+  formId: string
+  onTermsChecked?: () => void
 }) {
+  const form = useTermsCheckForm()
+
   return (
-    <div className={cn("flex items-center gap-2.5", className)}>
-      <Checkbox
-        id="terms-checkbox"
-        name="terms-checkbox"
-        checked={value}
-        onCheckedChange={(checked) => onValueChange?.(checked)}
-        aria-invalid={ariaInvalid}
+    <form
+      id={formId}
+      onSubmit={form.handleSubmit((values) => {
+        if (!values.terms) return
+        onTermsChecked?.()
+      })}
+    >
+      <Controller
+        disabled={disabled}
+        control={form.control}
+        name="terms"
+        render={({ field, fieldState }) => (
+          <Field>
+            <div className={cn("flex items-center gap-2.5", className)}>
+              <Checkbox
+                id="terms-checkbox"
+                name="terms-checkbox"
+                checked={field.value}
+                onCheckedChange={(checked) => field.onChange?.(checked)}
+                aria-invalid={fieldState.invalid}
+                disabled={field.disabled}
+              />
+              <FieldLabel
+                htmlFor="terms-checkbox"
+                className="felx text- gap-1 font-normal"
+              >
+                I agree to the
+                <Link
+                  href={"/terms" as Route}
+                  target="_blank"
+                  className="underline"
+                >
+                  Terms of Service
+                </Link>
+                and
+                <Link
+                  href={"/privacy" as Route}
+                  target="_blank"
+                  className="underline"
+                >
+                  Privacy Policy
+                </Link>
+                of Paw Fund.
+              </FieldLabel>
+            </div>
+            {fieldState.invalid && (
+              <FieldError className="text-xs" errors={[fieldState.error]} />
+            )}
+          </Field>
+        )}
       />
-      <FieldLabel
-        htmlFor="terms-checkbox"
-        className="felx text- gap-1 font-normal"
-      >
-        I agree to the
-        <Link href={"/terms" as Route} target="_blank" className="underline">
-          Terms of Service
-        </Link>
-        and
-        <Link href={"/privacy" as Route} target="_blank" className="underline">
-          Privacy Policy
-        </Link>
-        of Paw Fund.
-      </FieldLabel>
-    </div>
+    </form>
   )
 }
 

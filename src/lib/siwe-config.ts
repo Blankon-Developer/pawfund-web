@@ -1,4 +1,9 @@
-import { getAuthMe, getMessage, verifySignature } from "@/features/auth"
+import {
+  getAuthMe,
+  getAuthMeQueryOptions,
+  getMessage,
+  verifySignature,
+} from "@/features/auth"
 import { useJWTStore } from "@/stores/jwt.store"
 import { useSiweSessionStore } from "@/stores/siwe-session.store"
 import type {
@@ -7,15 +12,14 @@ import type {
   SIWEVerifyMessageArgs,
 } from "@reown/appkit-siwe"
 import { createSIWEConfig } from "@reown/appkit-siwe"
-import { baseSepolia } from "viem/chains"
+import { base, baseSepolia } from "viem/chains"
 import { queryClient } from "./react-query"
-import { getAuthMeQueryOptions } from "@/features/auth"
 
 const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
     domain: typeof window !== "undefined" ? window.location.host : "",
     uri: typeof window !== "undefined" ? window.location.origin : "",
-    chains: [baseSepolia.id],
+    chains: [baseSepolia.id, base.id],
   }),
   createMessage: ({ nonce: message }: SIWECreateMessageArgs) => {
     return message
@@ -38,7 +42,7 @@ const siweConfig = createSIWEConfig({
   },
   getSession: async () => {
     try {
-      const session = useSiweSessionStore.getState().getSession()
+      const session = useSiweSessionStore.getState().session
       if (!session) {
         return null
       }
@@ -51,10 +55,16 @@ const siweConfig = createSIWEConfig({
         .then((res) => {
           if (!res) return null
           useJWTStore.getState().setToken(session.jwt)
+          useSiweSessionStore.getState().addSession({
+            address: res.address,
+            chainId: res.chainId,
+            jwt: session.jwt,
+            user: res,
+          })
 
           return {
             address: res.address,
-            chainId: res.chainId ?? baseSepolia.id, // `?? baseSepolia.id` ini sebagai fallback sembari menunggu response be sudah sesuai
+            chainId: res.chainId,
           } satisfies SIWESession
         })
         .catch((err) => {

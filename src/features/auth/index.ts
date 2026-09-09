@@ -21,6 +21,9 @@ export {
   FundraiserRegisterPreview,
 } from "./components/register-forms"
 
+// pages
+export { RegisterPage } from "./pages/register-page"
+
 // store
 export { useRegistrationStore } from "./stores/registration.store"
 export { useUserStore } from "./stores/user.store"

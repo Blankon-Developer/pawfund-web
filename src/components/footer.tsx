@@ -9,6 +9,7 @@ import { cn } from "@/utils/cn"
 import { ArrowTopRightShape } from "@/assets/shape/arrow-top-right"
 import { PawCircular } from "@/assets/icons/paw-circular"
 import { ToggleTheme } from "./toggle-theme"
+import { useIsNotFound } from "@/app/not-found"
 
 const hideFooterPaths: Route[] = [
   "/register",
@@ -20,8 +21,9 @@ const hideFooterPaths: Route[] = [
 
 export function Footer() {
   const pathname = usePathname()
+  const is404 = useIsNotFound()
 
-  if (hideFooterPaths.includes(pathname as Route)) {
+  if (!is404 && hideFooterPaths.includes(pathname as Route)) {
     return null
   }
 

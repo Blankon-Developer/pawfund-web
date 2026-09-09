@@ -3,12 +3,13 @@ import { QueryConfig } from "@/lib/react-query"
 import { useSiweSessionStore } from "@/stores/siwe-session.store"
 import { queryOptions, useQuery } from "@tanstack/react-query"
 import { AuthMeData } from "../types/auth.types"
+import { cache } from "react"
 
 type AuthMeParams = {
   token?: string
 }
 
-const getAuthMe = async (
+const authMeRoot = async (
   params?: AuthMeParams,
   options?: Omit<ApiClientRequestOptions, "method">
 ): Promise<AuthMeData | undefined> => {
@@ -20,6 +21,10 @@ const getAuthMe = async (
   })
   return res.data
 }
+
+const getAuthMe = Object.assign(authMeRoot, {
+  cache: cache(authMeRoot),
+})
 
 const getAuthMeQueryOptions = (params?: AuthMeParams) =>
   queryOptions({

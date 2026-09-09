@@ -42,9 +42,16 @@ import { Input } from "@/shadcn-ui/input"
 import { cn } from "@/utils"
 
 import type { FileWithPreview } from "@/hooks/file-upload"
+import { useSearchParameters } from "@/hooks/search-parameters"
+import { useRouter } from "next/navigation"
+import {
+  useFundraiserRegister,
+  useUploadRegisterImage,
+} from "../../hooks/use-register"
 import { useRegistrationStore } from "../../stores/registration.store"
 import { RegisterPreviewItem } from "./register-preview-item"
-import { TermsCheckbox, useTermsCheckForm } from "./terms-checkbox"
+import { TermsCheckbox } from "./terms-checkbox"
+import { Spinner } from "@/shadcn-ui/spinner"
 
 const fundraiserRegisterSchema = z.object({
   name: z.string().min(1, "Fundraiser name is required."),
@@ -405,6 +412,7 @@ function FundraiserRegisterForm({
   )
 }
 
+const TERMS_FORM_ID = "fundraiser-terms-check"
 function FundraiserRegisterPreview({
   className,
   onPrevious,
@@ -412,26 +420,61 @@ function FundraiserRegisterPreview({
   className?: string
   onPrevious?: () => void
 }) {
-  const form = useTermsCheckForm()
-
   const fundraiserValues = useRegistrationStore(
     (state) => state.fundraiserValues
   )
   const { address } = useAccount()
 
-  const selectedCountry = countries.find(
-    (c) => c.alpha2Code === fundraiserValues?.country
-  )
+  const router = useRouter()
+  const { state: searchParams } = useSearchParameters()
+  const resetRegistration = useRegistrationStore((state) => state.reset)
 
-  const handleFormSubmit = form.handleSubmit((values) => {
-    console.log({ ...fundraiserValues, isTermsAgreed: values.terms })
+  const uploadImage = useUploadRegisterImage({
+    onError: (error) => {
+      toast.error("Error while uploading image", {
+        description: `${error.message}`,
+      })
+    },
   })
 
+  const register = useFundraiserRegister({
+    onError: (error) => {
+      toast.error("Failed to register", {
+        description: `${error.message}`,
+      })
+    },
+    onSuccess: () => {
+      toast.success("Fundraiser registered successfully")
+      resetRegistration()
+      router.replace(searchParams.redirect ?? "/")
+    },
+  })
+
+  const isLoading = uploadImage.isPending || register.isPending
+
+  const handleRegister = async () => {
+    if (typeof fundraiserValues === "undefined") {
+      toast.error("The form has not been fully completed.", {
+        description:
+          "Please double-check and complete any missing information.",
+      })
+      return
+    }
+
+    const { avatar, ...values } = fundraiserValues
+
+    const image = avatar?.file instanceof File ? avatar.file : undefined
+    const { objectKey } =
+      (image && (await uploadImage.mutateAsync(image))) || {}
+
+    register.mutate({
+      ...values,
+      imageObjectKey: objectKey,
+    })
+  }
+
   return (
-    <form
-      onSubmit={handleFormSubmit}
-      className={cn("flex flex-col items-center gap-8", className)}
-    >
+    <div className={cn("flex flex-col items-center gap-8", className)}>
       <div className="space-y-1 text-center">
         <H3>You&apos;re Almost In!</H3>
         <Text variant={"body"} className="mt-4">
@@ -489,26 +532,15 @@ function FundraiserRegisterPreview({
           label="Location"
           value={
             fundraiserValues?.country
-              ? `${selectedCountry?.name ?? fundraiserValues.country}${fundraiserValues.zipCode ? `, ${fundraiserValues.zipCode}` : ""}`
+              ? `${fundraiserValues.country}${fundraiserValues.zipCode ? `, ${fundraiserValues.zipCode}` : ""}`
               : "N/A"
           }
         />
-        <Controller
-          control={form.control}
-          name="terms"
-          render={({ field, fieldState }) => (
-            <Field>
-              <TermsCheckbox
-                className="mt-3"
-                value={field.value}
-                onValueChange={field.onChange}
-                aria-invalid={fieldState.invalid}
-              />
-              {fieldState.invalid && (
-                <FieldError className="text-xs" errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
+        <TermsCheckbox
+          formId={TERMS_FORM_ID}
+          className="mt-3"
+          disabled={isLoading}
+          onTermsChecked={handleRegister}
         />
       </div>
       <div className="mt-auto flex w-full justify-between gap-4">
@@ -517,12 +549,16 @@ function FundraiserRegisterPreview({
           variant={"outline"}
           size={"icon"}
           onClick={() => onPrevious?.()}
+          disabled={isLoading}
         >
           <ArrowLeftIcon data-icon="inline-start" />
         </Button>
-        <Button type="submit">Create Account</Button>
+        <Button type="submit" disabled={isLoading} form={TERMS_FORM_ID}>
+          {isLoading && <Spinner />}
+          {isLoading ? "Creating Account..." : "Create Account"}
+        </Button>
       </div>
-    </form>
+    </div>
   )
 }
 

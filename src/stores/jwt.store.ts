@@ -7,6 +7,8 @@ type JWTStore = {
   clearToken: () => void
 }
 
+const JWT_COOKIE_NAME = "@pawfund/jwt"
+
 const jwtStorage: StateStorage = {
   getItem(name) {
     if (typeof document === "undefined") {
@@ -60,11 +62,11 @@ const useJWTStore = create<JWTStore>()(
       setToken: (token: string) => set({ token }),
     }),
     {
-      name: "@pawfund/jwt",
+      name: JWT_COOKIE_NAME,
       storage: createJSONStorage(() => jwtStorage),
       version: 1,
     }
   )
 )
 
-export { useJWTStore }
+export { useJWTStore, JWT_COOKIE_NAME }

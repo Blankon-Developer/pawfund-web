@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation"
 import { Route } from "next"
 import { cn } from "@/utils"
 import { ToggleTheme } from "./toggle-theme"
+import { useIsNotFound } from "@/app/not-found"
 
 const hideHeaderPaths: Route[] = [
   "/register",
@@ -18,8 +19,9 @@ const hideHeaderPaths: Route[] = [
 
 export function Header() {
   const pathname = usePathname()
+  const is404 = useIsNotFound()
 
-  if (hideHeaderPaths.includes(pathname as Route)) {
+  if (!is404 && hideHeaderPaths.includes(pathname as Route)) {
     return null
   }
 

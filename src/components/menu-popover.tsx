@@ -19,6 +19,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Route } from "next"
 import { useState } from "react"
+import { usePathname } from "next/navigation"
 
 type MenuPopoverProps = {
   trigger?: React.ReactElement
@@ -160,13 +161,14 @@ function SupporterMenuContent({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 function UnregisteredMenuContent() {
+  const pathname = usePathname()
   return (
     <div className="flex flex-col gap-1">
       <Text variant={"label"} className="mt-2 mb-1 ml-2 text-muted-foreground">
         You are not registered yet.
       </Text>
       <Button asChild variant={"secondary"} className="w-full justify-start">
-        <Link href={"/register"}>
+        <Link href={`/register?redirect=${pathname}`}>
           <UserIcon strokeWidth={2.5} />
           Register
           <ArrowRightIcon className="ml-auto" />

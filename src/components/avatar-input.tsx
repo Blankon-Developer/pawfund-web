@@ -50,7 +50,7 @@ export function AvatarInput({
   ] = useFileUpload({
     maxFiles: 1,
     maxSize,
-    accept: "image/*",
+    accept: "image/jpeg, image/png, image/webp",
     multiple: false,
     onFilesChange: (files) => {
       onFileChange?.(files[0] || null)

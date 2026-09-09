@@ -12,7 +12,7 @@ export type Pagination = {
 }
 
 export type ApiSuccessType<T = any | null> = ApiBase & {
-  data?: T
+  data: T
   pagination?: Pagination
 }
 

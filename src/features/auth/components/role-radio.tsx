@@ -15,14 +15,14 @@ const roleItems: {
     title: "I’m a Supporter",
     description:
       "I want to explore campaigns and make donations to help animals in need.",
-    value: "SUPPORTER",
+    value: "supporter",
     icon: HandHeart,
   },
   {
     title: "I’m a Fundraiser",
     description:
       "I represent a shelter, rescue, or individual and would like to create a fundraising campaign.",
-    value: "FUNDRAISER",
+    value: "fundraiser",
     icon: Building2Icon,
   },
 ]

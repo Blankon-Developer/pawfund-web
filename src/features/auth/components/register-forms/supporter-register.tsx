@@ -25,8 +25,15 @@ import { cn } from "@/utils"
 import { useRegistrationStore } from "../../stores/registration.store"
 
 import type { FileWithPreview } from "@/hooks/file-upload"
+import { Spinner } from "@/shadcn-ui/spinner"
+import {
+  useSupporterRegister,
+  useUploadRegisterImage,
+} from "../../hooks/use-register"
 import { RegisterPreviewItem } from "./register-preview-item"
-import { TermsCheckbox, useTermsCheckForm } from "./terms-checkbox"
+import { TermsCheckbox } from "./terms-checkbox"
+import { useRouter } from "next/navigation"
+import { useSearchParameters } from "@/hooks/search-parameters"
 
 const supporterRegisterSchema = z.object({
   name: z.string().min(1, "Full name is required."),
@@ -65,7 +72,7 @@ function SupporterRegisterForm({
     },
   })
 
-  const handleFormSubmit = form.handleSubmit((values) => {
+  const handleAcceptTerms = form.handleSubmit((values) => {
     setSupporterValues(values)
     setStep(3)
     onSubmit?.(values)
@@ -74,7 +81,7 @@ function SupporterRegisterForm({
   return (
     <form
       className={cn("flex flex-col items-center gap-8", className)}
-      onSubmit={handleFormSubmit}
+      onSubmit={handleAcceptTerms}
     >
       <div className="space-y-1 text-center">
         <H3>Let’s Get to Know You</H3>
@@ -175,6 +182,8 @@ function SupporterRegisterForm({
   )
 }
 
+const TERMS_FORM_ID = "supporter-terms-check"
+
 function SupporterRegisterPreview({
   className,
   onPrevious,
@@ -182,21 +191,60 @@ function SupporterRegisterPreview({
   className?: string
   onPrevious?: () => void
 }) {
-  const form = useTermsCheckForm()
+  const router = useRouter()
+  const { state: searchParams } = useSearchParameters()
 
   const supporterValues = useRegistrationStore((state) => state.supporterValues)
+  const resetRegistration = useRegistrationStore((state) => state.reset)
+
   const { address } = useAccount()
 
-  const handleFormSubmit = form.handleSubmit((values) => {
-    // Handle form submission logic here
-    console.log({ ...supporterValues, isTermsAgreed: values.terms })
+  const uploadImage = useUploadRegisterImage({
+    onError: (error) => {
+      toast.error("Error while uploading image", {
+        description: `${error.message}`,
+      })
+    },
+  })
+  const register = useSupporterRegister({
+    onError: (error) => {
+      toast.error("Failed to register", {
+        description: `${error.message}`,
+      })
+    },
+    onSuccess: () => {
+      toast.success("Supporter registered successfully")
+      resetRegistration()
+      router.replace(searchParams.redirect ?? "/")
+    },
   })
 
+  const isLoading = uploadImage.isPending || register.isPending
+
+  const handleRegister = async () => {
+    if (typeof supporterValues === "undefined") {
+      toast.error("The form has not been fully completed.", {
+        description:
+          "Please double-check and complete any missing information.",
+      })
+      return
+    }
+
+    const { avatar, ...values } = supporterValues
+
+    const image = avatar?.file instanceof File ? avatar.file : undefined
+
+    const { objectKey } =
+      (image && (await uploadImage.mutateAsync(image))) || {}
+
+    register.mutate({
+      ...values,
+      imageObjectKey: objectKey,
+    })
+  }
+
   return (
-    <form
-      onSubmit={handleFormSubmit}
-      className={cn("flex flex-col items-center gap-8", className)}
-    >
+    <div className={cn("flex flex-col items-center gap-8", className)}>
       <div className="space-y-1 text-center">
         <H3>You’re Almost In!</H3>
         <Text variant={"body"} className="mt-4">
@@ -234,22 +282,11 @@ function SupporterRegisterPreview({
           label="Email"
           value={supporterValues?.email ?? "N/A"}
         />
-        <Controller
-          control={form.control}
-          name="terms"
-          render={({ field, fieldState }) => (
-            <Field>
-              <TermsCheckbox
-                className="mt-3"
-                value={field.value}
-                onValueChange={field.onChange}
-                aria-invalid={fieldState.invalid}
-              />
-              {fieldState.invalid && (
-                <FieldError className="text-xs" errors={[fieldState.error]} />
-              )}
-            </Field>
-          )}
+        <TermsCheckbox
+          formId={TERMS_FORM_ID}
+          className="mt-3"
+          disabled={isLoading}
+          onTermsChecked={handleRegister}
         />
       </div>
       <div className="mt-auto flex w-full justify-between gap-4">
@@ -258,12 +295,16 @@ function SupporterRegisterPreview({
           variant={"outline"}
           size={"icon"}
           onClick={() => onPrevious?.()}
+          disabled={isLoading}
         >
           <ArrowLeftIcon data-icon="inline-start" />
         </Button>
-        <Button type="submit">Create Account</Button>
+        <Button type="submit" disabled={isLoading} form={TERMS_FORM_ID}>
+          {isLoading && <Spinner />}
+          {isLoading ? "Creating Account..." : "Create Account"}
+        </Button>
       </div>
-    </form>
+    </div>
   )
 }
 

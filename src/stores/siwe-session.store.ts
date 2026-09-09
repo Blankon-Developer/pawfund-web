@@ -6,7 +6,7 @@ import { useJWTStore } from "./jwt.store"
 
 type SIWESessionExtended = SIWESession & {
   jwt: string
-  user?: Omit<AuthMeData, "address" >
+  user?: Omit<AuthMeData, "address" | "chainId">
 }
 
 type SIWESessionStoreType = {

@@ -19,7 +19,7 @@ type RoleSelectionFormProps = {
   onSubmit?: (values: RoleSelectionValues) => void
 }
 const roleSelectionSchema = z.object({
-  role: z.enum(["fundraiser", "supporter"] as [Role, ...Role[]], {
+  role: z.enum<Role[]>(["fundraiser", "supporter"], {
     error: "Please select a role to continue.",
   }),
 })
