@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { useSiweSessionStore } from "@/stores/siwe-session.store"
 import { ApiResponseType } from "@/types/api.types"
 import { ApiError, ApiValidationError } from "@/utils/api-error"
 import { buildApiUrl, buildUrlWithParams } from "@/utils/build-url"
@@ -22,6 +23,7 @@ type ApiClientRequestOptions = {
   priority?: RequestPriority
   credentials?: RequestCredentials
   defaultApiErrorToast?: boolean
+  bearerToken?: string
 }
 
 // Create a separate function for getting server-side cookies that can be imported where needed
@@ -57,7 +59,14 @@ async function fetchApi<T>(
     credentials = "same-origin",
     next,
     defaultApiErrorToast = false,
+    bearerToken: token,
   } = options
+
+  // Get user access token from the store if it's not provided in the options (on client-side)
+  let bearerToken = token
+  if (typeof window !== "undefined" && !token) {
+    bearerToken = useSiweSessionStore.getState().session?.jwt
+  }
 
   // Get cookies from the request when running on server
   let cookieHeader = cookie
@@ -77,6 +86,7 @@ async function fetchApi<T>(
         "Content-Type": "application/json",
         Accept: "application/json",
         ...headers,
+        ...(bearerToken ? { Authorization: `Bearer ${bearerToken}` } : {}),
         ...(cookieHeader ? { Cookie: cookieHeader } : {}),
       },
       body: body ? JSON.stringify(body) : undefined,
@@ -86,16 +96,17 @@ async function fetchApi<T>(
     })
 
     if (!response.ok) {
-      const res = (await response.json()) as ApiResponseType
+      const apiRes = (await response.json()) as ApiResponseType
+
       if (response.status === 422) {
         throw new ApiValidationError(
-          res.message,
+          apiRes.message,
           response.status,
-          res.code,
-          res.errors
+          apiRes.code,
+          apiRes.errors
         )
       } else {
-        throw new ApiError(res.message, response.status, res.code)
+        throw new ApiError(apiRes.message, response.status, apiRes.code)
       }
     }
     return response.json()

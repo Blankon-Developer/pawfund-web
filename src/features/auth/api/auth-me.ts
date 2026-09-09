@@ -1,11 +1,8 @@
 import { apiClient, ApiClientRequestOptions } from "@/lib/api-client"
-import { AuthMeData } from "../types/auth.types"
-import { queryOptions, useQuery } from "@tanstack/react-query"
 import { QueryConfig } from "@/lib/react-query"
-import { useJWTStore } from "@/stores/jwt.store"
-import { ApiError } from "@/utils/api-error"
 import { useSiweSessionStore } from "@/stores/siwe-session.store"
-import { baseSepolia } from "viem/chains"
+import { queryOptions, useQuery } from "@tanstack/react-query"
+import { AuthMeData } from "../types/auth.types"
 
 type AuthMeParams = {
   token?: string
@@ -15,36 +12,13 @@ const getAuthMe = async (
   params?: AuthMeParams,
   options?: Omit<ApiClientRequestOptions, "method">
 ): Promise<AuthMeData | undefined> => {
-  const bearerToken = params?.token ? `Bearer ${params.token}` : null
+  const bearerToken = params?.token
 
-  try {
-    const res = await apiClient.get<AuthMeData>("/auth/me", {
-      headers: {
-        ...options?.headers,
-        ...(bearerToken ? { Authorization: bearerToken } : {}),
-      },
-      ...options,
-    })
-    return res.data
-  } catch (error) {
-    if (error instanceof ApiError) {
-      if (error.status === 404) {
-        const session =
-          typeof window !== "undefined"
-            ? useSiweSessionStore.getState().getSession()
-            : null
-        return {
-          address: session?.address ?? "",
-          chainId: session?.chainId ?? baseSepolia.id,
-          imageUrl: null,
-          isNotRegistered: true,
-          name: null,
-          role: null,
-        }
-      }
-    }
-    throw error
-  }
+  const res = await apiClient.get<AuthMeData>("/auth/me", {
+    bearerToken,
+    ...options,
+  })
+  return res.data
 }
 
 const getAuthMeQueryOptions = (params?: AuthMeParams) =>
@@ -73,7 +47,7 @@ type UseGetAuthMeOptions = {
 }
 
 const useGetAuthMe = ({ queryConfig }: UseGetAuthMeOptions = {}) => {
-  const token = useJWTStore((state) => state.token)
+  const token = useSiweSessionStore((state) => state.session?.jwt)
 
   const query = useQuery({
     ...getAuthMeQueryOptions({ token: token ?? undefined }),
@@ -88,4 +62,4 @@ const useGetAuthMe = ({ queryConfig }: UseGetAuthMeOptions = {}) => {
   }
 }
 
-export { getAuthMe, useGetAuthMe, getAuthMeQueryOptions }
+export { getAuthMe, getAuthMeQueryOptions, useGetAuthMe }
