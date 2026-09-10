@@ -445,8 +445,8 @@ function FundraiserRegisterPreview({
     },
     onSuccess: () => {
       toast.success("Fundraiser registered successfully")
-      resetRegistration()
       router.replace(searchParams.redirect ?? "/")
+      resetRegistration()
     },
   })
 

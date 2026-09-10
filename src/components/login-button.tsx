@@ -59,7 +59,7 @@ export function LoginButton({ className }: { className?: string }) {
       onClick={() => open()}
       className={cn("", className)}
     >
-      Login
+      Connect Wallet
     </Button>
   )
 }

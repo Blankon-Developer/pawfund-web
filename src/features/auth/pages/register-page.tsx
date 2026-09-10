@@ -11,6 +11,7 @@ import {
   SupporterRegisterForm,
   SupporterRegisterPreview,
   useRegistrationStore,
+  withAuth,
 } from "@/features/auth"
 import { Tabs, TabsContent } from "@/shadcn-ui/tabs"
 import { cn } from "@/utils"
@@ -84,4 +85,8 @@ function RegisterPage() {
   )
 }
 
-export { RegisterPage }
+const Page = withAuth(RegisterPage, {
+  accept: ["unregistered"]
+})
+
+export { Page as RegisterPage }

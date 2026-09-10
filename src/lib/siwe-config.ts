@@ -14,6 +14,7 @@ import type {
 import { createSIWEConfig } from "@reown/appkit-siwe"
 import { base, baseSepolia } from "viem/chains"
 import { queryClient } from "./react-query"
+import { useSupporterAccount } from "@/features/account/"
 
 const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
@@ -92,6 +93,9 @@ const siweConfig = createSIWEConfig({
       useJWTStore.getState().setToken(accessToken)
       queryClient.invalidateQueries({
         queryKey: getAuthMeQueryOptions().queryKey,
+      })
+      queryClient.invalidateQueries({
+        queryKey: [useSupporterAccount.queryOptions().queryKey[0]],
       })
 
       addSession({

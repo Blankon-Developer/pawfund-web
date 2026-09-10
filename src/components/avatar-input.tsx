@@ -23,6 +23,7 @@ interface AvatarInputProps {
   onError?: (errors: string[]) => void
   "aria-invalid"?: boolean
   hideInstruction?: boolean
+  disabled?: boolean
 }
 
 export function AvatarInput({
@@ -35,6 +36,7 @@ export function AvatarInput({
   label,
   "aria-invalid": ariaInvalid,
   hideInstruction,
+  disabled
 }: AvatarInputProps) {
   const [
     { files, isDragging, errors },
@@ -79,7 +81,8 @@ export function AvatarInput({
             ariaInvalid &&
               "border-destructive/50 bg-destructive/5 hover:border-destructive/70",
             isDragging && "border-primary bg-primary/5 hover:border-primary",
-            previewUrl && "border-solid"
+            previewUrl && "border-solid",
+            disabled && "pointer-events-none opacity-50"
           )}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}

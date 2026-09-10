@@ -17,6 +17,7 @@ import { useAccount } from "wagmi"
 import z from "zod"
 
 import { AccountField } from "../account-field"
+import { useSupporterAccount } from "../../hooks/use-get-my-profile"
 
 const supporterAccountSchema = z.object({
   name: z.string().min(1, "Fundraiser name is required."),
@@ -26,25 +27,42 @@ const supporterAccountSchema = z.object({
     .email("Please enter a valid email address."),
   avatar: z.custom<FileWithPreview>().nullish(),
 })
-type SupporterAccountValues = z.infer<typeof supporterAccountSchema>
 
 type SupporterAccountFormProps = {
   className?: string
   id: string
-  defaultValues: SupporterAccountValues
 }
 
-function SupporterAccountForm({
-  className,
-  id,
-  defaultValues,
-}: SupporterAccountFormProps) {
+function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
   const { address } = useAccount()
+
+  const { data, isLoading } = useSupporterAccount()
 
   const form = useHookForm({
     schema: supporterAccountSchema,
-    defaultValues,
+    defaultValues: {
+      name: "",
+      email: "",
+      avatar: null,
+    },
   })
+
+  useEffect(() => {
+    if (!data) return
+    form.reset(
+      {
+        avatar: data.imageUrl
+          ? {
+              id: `id-${data.imageUrl}`,
+              preview: data.imageUrl ?? undefined,
+            }
+          : null,
+        name: data.name,
+        email: data.email,
+      },
+      { keepDirtyValues: true }
+    )
+  }, [form, data])
 
   const isDirty = form.formState.isDirty
   const setIsDirty = useAccountFormStore((state) => state.setIsDirty)
@@ -60,7 +78,6 @@ function SupporterAccountForm({
   const handleReset = useCallback(() => {
     form.reset()
   }, [form])
-
   return (
     <form
       id={id}
@@ -70,6 +87,7 @@ function SupporterAccountForm({
     >
       {/* Avatar */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="avatar"
         render={({ field, fieldState, formState }) => (
@@ -82,6 +100,7 @@ function SupporterAccountForm({
             <div className="flex gap-3">
               <div className="flex flex-col items-center gap-2">
                 <AvatarInput
+                  disabled={field.disabled}
                   className="w-fit"
                   hideInstruction
                   value={field.value ?? undefined}
@@ -99,7 +118,9 @@ function SupporterAccountForm({
                   }
                 />
                 <Button
-                  hidden={field.value?.id != defaultValues.avatar?.id}
+                  hidden={
+                    !data?.imageUrl || field.value?.preview !== data?.imageUrl
+                  }
                   onClick={() => {
                     field.onChange(null)
                   }}
@@ -121,6 +142,7 @@ function SupporterAccountForm({
 
       {/* Supporter Name */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="name"
         render={({ field, fieldState }) => (
@@ -145,6 +167,7 @@ function SupporterAccountForm({
 
       {/* Email */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="email"
         render={({ field, fieldState }) => (

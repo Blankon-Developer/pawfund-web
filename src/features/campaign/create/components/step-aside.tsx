@@ -2,6 +2,7 @@ import { H2, Text } from "@/components/typography"
 import { Button } from "@/shadcn-ui/button"
 import { cn } from "@/utils"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 type CreateCampaignStepInfoProps = {
   title: string
@@ -18,6 +19,7 @@ function StepAside({
   step,
   className,
 }: CreateCampaignStepInfoProps) {
+  const router = useRouter()
   return (
     <div className={cn("flex h-svh flex-col justify-between py-6", className)}>
       <div>
@@ -40,6 +42,7 @@ function StepAside({
         size={"sm"}
         variant="ghost"
         className="w-fit text-destructive hover:text-destructive"
+        onClick={() => router.back()}
       >
         Cancel
       </Button>

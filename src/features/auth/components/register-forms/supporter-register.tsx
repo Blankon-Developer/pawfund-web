@@ -214,8 +214,8 @@ function SupporterRegisterPreview({
     },
     onSuccess: () => {
       toast.success("Supporter registered successfully")
-      resetRegistration()
       router.replace(searchParams.redirect ?? "/")
+      resetRegistration()
     },
   })
 

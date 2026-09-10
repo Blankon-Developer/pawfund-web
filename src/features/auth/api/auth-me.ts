@@ -59,11 +59,11 @@ const useGetAuthMe = ({ queryConfig }: UseGetAuthMeOptions = {}) => {
     ...queryConfig,
   })
 
-  const isAuthenticated = !!query.data?.role
+  const isRegistered = !!query.data?.role
 
   return {
     ...query,
-    isAuthenticated,
+    isRegistered,
   }
 }
 

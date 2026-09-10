@@ -31,6 +31,7 @@ import { useAccount } from "wagmi"
 import z from "zod"
 
 import { AccountField } from "../account-field"
+import { useFundraiserAccount } from "../../hooks/use-get-my-profile"
 
 function FieldLabel(props: React.ComponentProps<typeof FieldLabelPrimitive>) {
   return (
@@ -61,25 +62,53 @@ const fundraiserAccountSchema = z.object({
   zipCode: z.string().min(1, "Please enter your zip code."),
   avatar: z.custom<FileWithPreview>().nullish(),
 })
-type FundraiserAccountValues = z.infer<typeof fundraiserAccountSchema>
 
 type FundraiserAccountFormProps = {
   className?: string
   id: string
-  defaultValues: FundraiserAccountValues
 }
 
-function FundraiserAccountForm({
-  className,
-  id,
-  defaultValues,
-}: FundraiserAccountFormProps) {
+function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
   const { address } = useAccount()
+
+  const { data, isLoading } = useFundraiserAccount()
 
   const form = useHookForm({
     schema: fundraiserAccountSchema,
-    defaultValues,
+    defaultValues: {
+      avatar: null,
+      name: "",
+      email: "",
+      contactPerson: {
+        name: "",
+        phone: "",
+      },
+      socialUrl: "",
+      country: "",
+      zipCode: "",
+    },
   })
+
+  useEffect(() => {
+    if (!data) return
+    form.reset(
+      {
+        avatar: data.imageUrl
+          ? {
+              id: `id-${data.imageUrl}`,
+              preview: data.imageUrl ?? undefined,
+            }
+          : null,
+        name: data.name,
+        email: data.email,
+        contactPerson: data.contactPerson,
+        country: data.country,
+        socialUrl: data.socialUrl,
+        zipCode: String(data.zipCode),
+      },
+      { keepDirtyValues: true }
+    )
+  }, [form, data])
 
   const isDirty = form.formState.isDirty
   const setIsDirty = useAccountFormStore((state) => state.setIsDirty)
@@ -117,6 +146,7 @@ function FundraiserAccountForm({
     >
       {/* Fundraiser Name */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="name"
         render={({ field, fieldState }) => (
@@ -141,6 +171,7 @@ function FundraiserAccountForm({
 
       {/* Avatar */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="avatar"
         render={({ field, fieldState, formState }) => (
@@ -153,6 +184,7 @@ function FundraiserAccountForm({
             <div className="flex gap-3">
               <div className="flex flex-col items-center gap-2">
                 <AvatarInput
+                  disabled={field.disabled}
                   className="w-fit"
                   hideInstruction
                   value={field.value ?? undefined}
@@ -170,7 +202,9 @@ function FundraiserAccountForm({
                   }
                 />
                 <Button
-                  hidden={field.value?.id != defaultValues.avatar?.id}
+                  hidden={
+                    !data?.imageUrl || field.value?.preview !== data?.imageUrl
+                  }
                   onClick={() => {
                     field.onChange(null)
                   }}
@@ -192,6 +226,7 @@ function FundraiserAccountForm({
 
       {/* Email */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="email"
         render={({ field, fieldState }) => (
@@ -224,6 +259,7 @@ function FundraiserAccountForm({
       >
         <div className="flex w-full flex-col gap-3 sm:flex-row">
           <Controller
+            disabled={isLoading}
             control={form.control}
             name="contactPerson.name"
             render={({ field, fieldState }) => (
@@ -236,7 +272,7 @@ function FundraiserAccountForm({
                   {...field}
                   id="input-contact-name"
                   type="text"
-                  placeholder="Fullname"
+                  placeholder="Full name"
                   aria-invalid={fieldState.invalid}
                 />
                 {fieldState.invalid && (
@@ -246,6 +282,7 @@ function FundraiserAccountForm({
             )}
           />
           <Controller
+            disabled={isLoading}
             control={form.control}
             name="contactPerson.phone"
             render={({ field, fieldState }) => (
@@ -277,6 +314,7 @@ function FundraiserAccountForm({
 
       {/* Social URL */}
       <Controller
+        disabled={isLoading}
         control={form.control}
         name="socialUrl"
         render={({ field, fieldState }) => (
@@ -312,6 +350,7 @@ function FundraiserAccountForm({
       >
         <div className="flex w-full flex-col gap-3 sm:flex-row">
           <Controller
+            disabled={isLoading}
             control={form.control}
             name="country"
             render={({ field, fieldState }) => (
@@ -321,6 +360,7 @@ function FundraiserAccountForm({
               >
                 <FieldLabel htmlFor="combobox-country">Country</FieldLabel>
                 <Combobox
+                  disabled={field.disabled}
                   value={field.value}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -331,6 +371,7 @@ function FundraiserAccountForm({
                     placeholder="Type the country..."
                     className="w-full"
                     aria-invalid={fieldState.invalid}
+                    disabled={field.disabled}
                   />
                   <ComboboxContent>
                     <ComboboxEmpty>No country found.</ComboboxEmpty>
@@ -353,6 +394,7 @@ function FundraiserAccountForm({
             )}
           />
           <Controller
+            disabled={isLoading}
             control={form.control}
             name="zipCode"
             render={({ field, fieldState }) => (

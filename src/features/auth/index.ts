@@ -11,6 +11,7 @@ export { getMessage } from "./api/message"
 export { verifySignature } from "./api/verify-signature"
 
 // components
+export { withAuth } from "./components/with-auth"
 export { RegisterStepper } from "./components/register-stepper"
 export { RoleRadio } from "./components/role-radio"
 export {
@@ -21,9 +22,13 @@ export {
   FundraiserRegisterPreview,
 } from "./components/register-forms"
 
+
 // pages
 export { RegisterPage } from "./pages/register-page"
 
 // store
 export { useRegistrationStore } from "./stores/registration.store"
 export { useUserStore } from "./stores/user.store"
+
+// server
+export { getServerJWTCookie } from "./server"
