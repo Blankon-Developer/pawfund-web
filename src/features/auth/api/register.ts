@@ -4,7 +4,7 @@ import {
   RegisterFundraiserResponse,
   RegisterSupporterParams,
   RegisterSupporterResponse,
-} from "../types/register.types"
+} from "../types"
 
 async function supporter(
   params: RegisterSupporterParams,

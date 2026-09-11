@@ -1,5 +1,5 @@
 import { PawCircular } from "@/assets/icons/paw-circular"
-import { CampaignCard } from "@/features/campaign/components"
+import { CampaignCard } from "@/features/campaign/"
 
 export function MoreCampaignsSection() {
   return (

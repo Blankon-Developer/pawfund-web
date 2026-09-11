@@ -17,7 +17,7 @@ import { useAccount } from "wagmi"
 import z from "zod"
 
 import { AccountField } from "../account-field"
-import { useSupporterAccount } from "../../hooks/use-get-my-profile"
+import { useGetSupporterAccount } from "../../hooks/use-get-account"
 
 const supporterAccountSchema = z.object({
   name: z.string().min(1, "Fundraiser name is required."),
@@ -36,7 +36,7 @@ type SupporterAccountFormProps = {
 function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
   const { address } = useAccount()
 
-  const { data, isLoading } = useSupporterAccount()
+  const { data, isLoading } = useGetSupporterAccount()
 
   const form = useHookForm({
     schema: supporterAccountSchema,

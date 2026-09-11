@@ -31,7 +31,7 @@ import { useAccount } from "wagmi"
 import z from "zod"
 
 import { AccountField } from "../account-field"
-import { useFundraiserAccount } from "../../hooks/use-get-my-profile"
+import { useGetFundraiserAccount } from "../../hooks/use-get-account"
 
 function FieldLabel(props: React.ComponentProps<typeof FieldLabelPrimitive>) {
   return (
@@ -71,7 +71,7 @@ type FundraiserAccountFormProps = {
 function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
   const { address } = useAccount()
 
-  const { data, isLoading } = useFundraiserAccount()
+  const { data, isLoading } = useGetFundraiserAccount()
 
   const form = useHookForm({
     schema: fundraiserAccountSchema,

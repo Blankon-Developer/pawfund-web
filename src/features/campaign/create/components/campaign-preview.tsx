@@ -2,7 +2,6 @@
 
 import { MainContainer } from "@/components/main-container"
 import { H3, Text } from "@/components/typography"
-import { useGetAuthMe } from "@/features/auth"
 import { Separator } from "@/shadcn-ui/separator"
 import { formatDate } from "@/utils/format-date"
 import { maskAddress } from "@/utils/mask-address"
@@ -15,6 +14,7 @@ import { CampaignStory } from "../../detail/components/campaign-story"
 import { DonationField } from "../../detail/components/donation-field"
 import { FloatingDonationField } from "../../detail/components/floating-donation-field"
 import { useCreateCampaignValuesStore } from "../store"
+import { useGetAuthMe } from "@/features/auth"
 
 export function CampaignPreview() {
   const { getIsValuesFilled, getValues } = useCreateCampaignValuesStore(

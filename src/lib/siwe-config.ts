@@ -1,7 +1,7 @@
 import {
   getAuthMe,
-  getAuthMeQueryOptions,
   getMessage,
+  useGetAuthMe,
   verifySignature,
 } from "@/features/auth"
 import { useJWTStore } from "@/stores/jwt.store"
@@ -13,8 +13,7 @@ import type {
 } from "@reown/appkit-siwe"
 import { createSIWEConfig } from "@reown/appkit-siwe"
 import { base, baseSepolia } from "viem/chains"
-import { queryClient } from "./react-query"
-import { useSupporterAccount } from "@/features/account/"
+import { authedQueryKey, queryClient } from "./react-query"
 
 const siweConfig = createSIWEConfig({
   getMessageParams: async () => ({
@@ -49,7 +48,7 @@ const siweConfig = createSIWEConfig({
       }
       const authMe = await queryClient
         .fetchQuery({
-          queryKey: getAuthMeQueryOptions({ token: session.jwt }).queryKey,
+          queryKey: useGetAuthMe.getQueryOptions({ token: session.jwt }).queryKey,
           queryFn: () => getAuthMe({ token: session.jwt }),
           staleTime: 5 * 60 * 1000,
         })
@@ -91,11 +90,9 @@ const siweConfig = createSIWEConfig({
 
       const addSession = useSiweSessionStore.getState().addSession
       useJWTStore.getState().setToken(accessToken)
+
       queryClient.invalidateQueries({
-        queryKey: getAuthMeQueryOptions().queryKey,
-      })
-      queryClient.invalidateQueries({
-        queryKey: [useSupporterAccount.queryOptions().queryKey[0]],
+        queryKey: authedQueryKey(),
       })
 
       addSession({

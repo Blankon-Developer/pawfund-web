@@ -18,6 +18,9 @@ export const queryClient = new QueryClient({
   defaultOptions: queryConfig,
 })
 
+export const authedQueryKey = (keys?: unknown[]) => (keys ? ["authed", ...keys] : ["authed"])
+export const publicQueryKey = (keys?: unknown[]) => (keys ? ["public", ...keys] : ["public"])
+
 export type ApiFnReturnType<FnType extends (...args: any) => Promise<any>> =
   Awaited<ReturnType<FnType>>
 

@@ -1,8 +1,9 @@
 "use client"
 
 import Image from "next/image"
-
 import { MainContainer } from "@/components/main-container"
+import { Tabs, TabsContent } from "@/shadcn-ui/tabs"
+import { cn } from "@/utils"
 import {
   FundraiserRegisterForm,
   FundraiserRegisterPreview,
@@ -10,11 +11,9 @@ import {
   RoleSelectionForm,
   SupporterRegisterForm,
   SupporterRegisterPreview,
-  useRegistrationStore,
   withAuth,
-} from "@/features/auth"
-import { Tabs, TabsContent } from "@/shadcn-ui/tabs"
-import { cn } from "@/utils"
+} from "../components"
+import { useRegistrationStore } from "../stores"
 
 function RegisterPage() {
   const step = useRegistrationStore((state) => state.step)
@@ -86,7 +85,7 @@ function RegisterPage() {
 }
 
 const Page = withAuth(RegisterPage, {
-  accept: ["unregistered"]
+  accept: ["unregistered"],
 })
 
 export { Page as RegisterPage }

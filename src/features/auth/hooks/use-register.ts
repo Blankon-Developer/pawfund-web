@@ -2,7 +2,7 @@ import { MutationConfig, queryClient } from "@/lib/react-query"
 import { useMutation } from "@tanstack/react-query"
 import { register } from "../api/register"
 import { useSiweSessionStore } from "@/stores/siwe-session.store"
-import { getAuthMeQueryOptions } from "../api/auth-me"
+import { useGetAuthMe } from "./use-get-auth-me"
 
 // upload image
 
@@ -37,7 +37,7 @@ function useSupporterRegister(
           },
         })
       queryClient.invalidateQueries({
-        queryKey: getAuthMeQueryOptions().queryKey,
+        queryKey: useGetAuthMe.getQueryOptions().queryKey,
       })
       mutationConfig.onSuccess?.(data, ...params)
     },
@@ -66,7 +66,7 @@ function useFundraiserRegister(
           },
         })
       queryClient.invalidateQueries({
-        queryKey: getAuthMeQueryOptions().queryKey,
+        queryKey: useGetAuthMe.getQueryOptions().queryKey,
       })
       mutationConfig.onSuccess?.(data, ...params)
     },
