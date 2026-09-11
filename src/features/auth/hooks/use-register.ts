@@ -6,7 +6,7 @@ import { useGetAuthMe } from "./use-get-auth-me"
 
 // upload image
 
-function useUploadRegisterImage(
+function useUploadProfileImage(
   mutationConfig: MutationConfig<typeof register.uploadImage> = {}
 ) {
   return useMutation({
@@ -22,7 +22,7 @@ function useSupporterRegister(
   return useMutation({
     mutationFn: (params) => register.supporter(params),
     ...mutationConfig,
-    onSuccess: (data, ...params) => {
+    onSuccess: (data, ...args) => {
       const currentSession = useSiweSessionStore.getState().session
       if (currentSession)
         useSiweSessionStore.getState().addSession({
@@ -39,7 +39,7 @@ function useSupporterRegister(
       queryClient.invalidateQueries({
         queryKey: useGetAuthMe.getQueryOptions().queryKey,
       })
-      mutationConfig.onSuccess?.(data, ...params)
+      mutationConfig.onSuccess?.(data, ...args)
     },
   })
 }
@@ -51,7 +51,7 @@ function useFundraiserRegister(
   return useMutation({
     mutationFn: (params) => register.fundraiser(params),
     ...mutationConfig,
-    onSuccess: (data, ...params) => {
+    onSuccess: (data, ...args) => {
       const currentSession = useSiweSessionStore.getState().session
       if (currentSession)
         useSiweSessionStore.getState().addSession({
@@ -68,9 +68,9 @@ function useFundraiserRegister(
       queryClient.invalidateQueries({
         queryKey: useGetAuthMe.getQueryOptions().queryKey,
       })
-      mutationConfig.onSuccess?.(data, ...params)
+      mutationConfig.onSuccess?.(data, ...args)
     },
   })
 }
 
-export { useFundraiserRegister, useSupporterRegister, useUploadRegisterImage }
+export { useFundraiserRegister, useSupporterRegister, useUploadProfileImage }

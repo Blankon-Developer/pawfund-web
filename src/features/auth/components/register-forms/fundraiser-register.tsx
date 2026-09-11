@@ -46,7 +46,7 @@ import { useSearchParameters } from "@/hooks/search-parameters"
 import { useRouter } from "next/navigation"
 import {
   useFundraiserRegister,
-  useUploadRegisterImage,
+  useUploadProfileImage,
 } from "../../hooks/use-register"
 import { useRegistrationStore } from "../../stores/registration.store"
 import { RegisterPreviewItem } from "./register-preview-item"
@@ -429,7 +429,7 @@ function FundraiserRegisterPreview({
   const { state: searchParams } = useSearchParameters()
   const resetRegistration = useRegistrationStore((state) => state.reset)
 
-  const uploadImage = useUploadRegisterImage({
+  const uploadImage = useUploadProfileImage({
     onError: (error) => {
       toast.error("Error while uploading image", {
         description: `${error.message}`,

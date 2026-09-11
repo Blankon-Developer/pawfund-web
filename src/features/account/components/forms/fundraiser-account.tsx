@@ -31,7 +31,8 @@ import { useAccount } from "wagmi"
 import z from "zod"
 
 import { AccountField } from "../account-field"
-import { useGetFundraiserAccount } from "../../hooks/use-get-account"
+import { useGetFundraiserAccount, useEditFundraiserAccount } from "../../hooks/"
+import { useUploadProfileImage } from "@/features/auth"
 
 function FieldLabel(props: React.ComponentProps<typeof FieldLabelPrimitive>) {
   return (
@@ -71,7 +72,20 @@ type FundraiserAccountFormProps = {
 function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
   const { address } = useAccount()
 
-  const { data, isLoading } = useGetFundraiserAccount()
+  const { data, isLoading, isStale } = useGetFundraiserAccount()
+
+  const { isPending: editPending, ...editAccount } = useEditFundraiserAccount({
+    onSuccess: () => {
+      toast.success("Account updated successfully!")
+    },
+    onError: (err) => {
+      toast.error("Error updating account", {
+        description: `${err}`,
+      })
+    },
+  })
+
+  const uploadImage = useUploadProfileImage()
 
   const form = useHookForm({
     schema: fundraiserAccountSchema,
@@ -106,9 +120,9 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
         socialUrl: data.socialUrl,
         zipCode: String(data.zipCode),
       },
-      { keepDirtyValues: true }
+      { keepDirtyValues: isStale }
     )
-  }, [form, data])
+  }, [form, data, isStale])
 
   const isDirty = form.formState.isDirty
   const setIsDirty = useAccountFormStore((state) => state.setIsDirty)
@@ -117,8 +131,19 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
     setIsDirty(isDirty)
   }, [isDirty, setIsDirty])
 
-  const handleSubmit = form.handleSubmit((values) => {
-    console.log({ values })
+  const handleSubmit = form.handleSubmit(async ({ avatar, ...values }) => {
+    const image = avatar?.file instanceof File ? avatar?.file : undefined
+    const { objectKey } =
+      (image && (await uploadImage.mutateAsync(image))) || {}
+
+    editAccount.mutate({
+      ...values,
+      imageObjectKey: objectKey
+        ? objectKey
+        : form.getFieldState("avatar").isDirty
+          ? null
+          : undefined,
+    })
   })
 
   const handleReset = useCallback(() => {
@@ -146,7 +171,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
     >
       {/* Fundraiser Name */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="name"
         render={({ field, fieldState }) => (
@@ -171,7 +196,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
 
       {/* Avatar */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="avatar"
         render={({ field, fieldState, formState }) => (
@@ -189,6 +214,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
                   hideInstruction
                   value={field.value ?? undefined}
                   onFileChange={(file) => {
+                    console.log("file", file)
                     if (!file)
                       return field.onChange(formState.defaultValues?.avatar)
                     field.onChange(file)
@@ -226,7 +252,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
 
       {/* Email */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="email"
         render={({ field, fieldState }) => (
@@ -259,7 +285,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
       >
         <div className="flex w-full flex-col gap-3 sm:flex-row">
           <Controller
-            disabled={isLoading}
+            disabled={isLoading || editPending}
             control={form.control}
             name="contactPerson.name"
             render={({ field, fieldState }) => (
@@ -282,7 +308,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
             )}
           />
           <Controller
-            disabled={isLoading}
+            disabled={isLoading || editPending}
             control={form.control}
             name="contactPerson.phone"
             render={({ field, fieldState }) => (
@@ -314,7 +340,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
 
       {/* Social URL */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="socialUrl"
         render={({ field, fieldState }) => (
@@ -350,7 +376,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
       >
         <div className="flex w-full flex-col gap-3 sm:flex-row">
           <Controller
-            disabled={isLoading}
+            disabled={isLoading || editPending}
             control={form.control}
             name="country"
             render={({ field, fieldState }) => (
@@ -394,7 +420,7 @@ function FundraiserAccountForm({ className, id }: FundraiserAccountFormProps) {
             )}
           />
           <Controller
-            disabled={isLoading}
+            disabled={isLoading || editPending}
             control={form.control}
             name="zipCode"
             render={({ field, fieldState }) => (

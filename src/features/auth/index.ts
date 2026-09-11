@@ -5,7 +5,7 @@ export type { Role, AuthMeData } from "./types"
 export { getAuthMe, getMessage, verifySignature } from "./api"
 
 // hooks
-export { useGetAuthMe } from "./hooks"
+export { useGetAuthMe, useUploadProfileImage } from "./hooks"
 
 // components
 export { withAuth } from "./components"

@@ -28,7 +28,7 @@ import type { FileWithPreview } from "@/hooks/file-upload"
 import { Spinner } from "@/shadcn-ui/spinner"
 import {
   useSupporterRegister,
-  useUploadRegisterImage,
+  useUploadProfileImage,
 } from "../../hooks/use-register"
 import { RegisterPreviewItem } from "./register-preview-item"
 import { TermsCheckbox } from "./terms-checkbox"
@@ -199,7 +199,7 @@ function SupporterRegisterPreview({
 
   const { address } = useAccount()
 
-  const uploadImage = useUploadRegisterImage({
+  const uploadImage = useUploadProfileImage({
     onError: (error) => {
       toast.error("Error while uploading image", {
         description: `${error.message}`,

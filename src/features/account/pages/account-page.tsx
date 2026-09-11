@@ -8,9 +8,14 @@ import { useAccountFormStore } from "../stores/form.store"
 
 function AccountPage({ user }: { user: AuthMeData }) {
   const isDirty = useAccountFormStore((state) => state.isDirty)
+  const isSubmitting = useAccountFormStore((state) => state.isSubmitting)
 
   return (
-    <AccountLayout formId={`account-${user.role}`} isDirty={isDirty}>
+    <AccountLayout
+      formId={`account-${user.role}`}
+      isDirty={isDirty}
+      isLoading={isSubmitting}
+    >
       {user?.role?.toLowerCase() === "fundraiser" && (
         <FundraiserAccountForm id={`account-${user.role}`} />
       )}

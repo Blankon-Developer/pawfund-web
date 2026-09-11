@@ -2,7 +2,7 @@ import { apiClient, ApiClientRequestOptions } from "@/lib/api-client"
 import { FundraiserAccountData, SupporterAccountData } from "../types"
 
 async function fundraiser(
-  options?: ApiClientRequestOptions
+  options?: Omit<ApiClientRequestOptions, "method">
 ): Promise<FundraiserAccountData> {
   const res = await apiClient.get<FundraiserAccountData>(
     "/fundraiser/profile",
@@ -12,7 +12,7 @@ async function fundraiser(
 }
 
 async function supporter(
-  options?: ApiClientRequestOptions
+  options?: Omit<ApiClientRequestOptions, "method">
 ): Promise<SupporterAccountData> {
   const res = await apiClient
     .get<SupporterAccountData>("/supporter/profile", options)

@@ -11,10 +11,12 @@ export function AccountLayout({
   children,
   isDirty,
   formId,
+  isLoading,
 }: {
   children?: React.ReactNode
   isDirty?: boolean
   formId: string
+  isLoading?: boolean
 }) {
   return (
     <MainContainer as="div" className="relative min-h-svh max-w-3xl">
@@ -45,12 +47,18 @@ export function AccountLayout({
           className={`sticky bottom-0 z-30 flex h-[4rem] items-center justify-end gap-2 bg-background`}
         >
           <div className="flex items-center gap-2">
-            <Button form={formId} type="reset" variant={"secondary"} size="sm">
+            <Button
+              disabled={isLoading}
+              form={formId}
+              type="reset"
+              variant={"secondary"}
+              size="sm"
+            >
               Reset Changes
             </Button>
-            <Button size="sm" type="submit" form={formId}>
+            <Button disabled={isLoading} size="sm" type="submit" form={formId}>
               <SaveIcon />
-              Save
+              {isLoading ? "Saving..." : "Save"}
             </Button>
           </div>
         </footer>

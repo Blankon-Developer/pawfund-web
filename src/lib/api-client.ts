@@ -109,7 +109,10 @@ async function fetchApi<T>(
         throw new ApiError(apiRes.message, response.status, apiRes.code)
       }
     }
-    return response.json()
+    return response
+      .json()
+      .then((data) => data)
+      .catch(() => undefined)
   } catch (error) {
     if (typeof window !== "undefined") {
       if (error instanceof ApiError) {

@@ -18,6 +18,8 @@ import z from "zod"
 
 import { AccountField } from "../account-field"
 import { useGetSupporterAccount } from "../../hooks/use-get-account"
+import { useUploadProfileImage } from "@/features/auth"
+import { useEditSupporterAccount } from "../../hooks"
 
 const supporterAccountSchema = z.object({
   name: z.string().min(1, "Fundraiser name is required."),
@@ -36,7 +38,20 @@ type SupporterAccountFormProps = {
 function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
   const { address } = useAccount()
 
-  const { data, isLoading } = useGetSupporterAccount()
+  const { data, isLoading , isStale} = useGetSupporterAccount()
+
+  const { isPending: editPending, ...editAccount } = useEditSupporterAccount({
+    onSuccess: () => {
+      toast.success("Account updated successfully!")
+    },
+    onError: (err) => {
+      toast.error("Error updating account", {
+        description: `${err}`,
+      })
+    },
+  })
+
+  const uploadImage = useUploadProfileImage()
 
   const form = useHookForm({
     schema: supporterAccountSchema,
@@ -60,9 +75,9 @@ function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
         name: data.name,
         email: data.email,
       },
-      { keepDirtyValues: true }
+      { keepDirtyValues: isStale }
     )
-  }, [form, data])
+  }, [form, data, isStale])
 
   const isDirty = form.formState.isDirty
   const setIsDirty = useAccountFormStore((state) => state.setIsDirty)
@@ -71,8 +86,18 @@ function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
     setIsDirty(isDirty)
   }, [isDirty, setIsDirty])
 
-  const handleSubmit = form.handleSubmit((values) => {
-    console.log({ values })
+  const handleSubmit = form.handleSubmit(async ({ avatar, ...values }) => {
+    const image = avatar?.file instanceof File ? avatar?.file : undefined
+    const { objectKey } =
+      (image && (await uploadImage.mutateAsync(image))) || {}
+    editAccount.mutate({
+      ...values,
+      imageObjectKey: objectKey
+        ? objectKey
+        : form.getFieldState("avatar").isDirty
+          ? null
+          : undefined,
+    })
   })
 
   const handleReset = useCallback(() => {
@@ -87,7 +112,7 @@ function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
     >
       {/* Avatar */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="avatar"
         render={({ field, fieldState, formState }) => (
@@ -142,7 +167,7 @@ function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
 
       {/* Supporter Name */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="name"
         render={({ field, fieldState }) => (
@@ -167,7 +192,7 @@ function SupporterAccountForm({ className, id }: SupporterAccountFormProps) {
 
       {/* Email */}
       <Controller
-        disabled={isLoading}
+        disabled={isLoading || editPending}
         control={form.control}
         name="email"
         render={({ field, fieldState }) => (
